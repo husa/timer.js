@@ -39,8 +39,7 @@ Timer = function(options) {
 			duration *= 1000;
 		}
 
-		duration = that.duration === 0 ? duration : that.duration;
-		that.duration = duration;
+		that.duration = duration = that.duration === 0 ? duration : that.duration;
 		timeout = setTimeout(end, duration);
 		time.start = +new Date();
 		if (options.ontick !== defaultOptoins.ontick) {
@@ -72,7 +71,6 @@ Timer = function(options) {
 	function end() {
 		clearTimeout(timeout);
 		clearInterval(interval);
-		console.log('ended......')
 		options.onend();
 		this.status = 'finished';
 		return this;
@@ -96,13 +94,22 @@ Timer = function(options) {
 		}
 		return this;
 	}
+
 	function off(option) {
-		if (typeof(option) !== 'string') return;
-		if (option.indexOf('on') !== 0) {
-			option = 'on' + option;
+		if (typeof(option) !== 'string') {
+			return
+		} else {
+			option = option.toLowerCase();
 		}
-		if (options.hasOwnProperty(option)) {
-			options[option] = defaultOptoins[option];
+		if (option === 'all') {
+			options = defaultOptoins;
+		} else {
+			if (option.indexOf('on') !== 0) {
+				option = 'on' + option;
+			}
+			if (options.hasOwnProperty(option)) {
+				options[option] = defaultOptoins[option];
+			}	
 		}
 		return this;
 	}
@@ -111,22 +118,9 @@ Timer = function(options) {
 		start 		: start,
 		stop 		: stop,
 		pause 		: pause,
-		on 			: on,
-		off			: off,
+		on 		: on,
+		off		: off,
 		getStatus 	: getStatus,
-		getDuration : getDuration
+		getDuration 	: getDuration
 	}
 }
-
-timer = new Timer({
-	tick : 1,
-	ontick : function (sec) {
-		console.log('interval', sec);
-	}
-});
-timer.start(8);
-timer.on('end', function () {
-	console.log('ON end');
-})
-//timer.off('end').off('tick');
-console.log(timer.getStatus());
