@@ -1,13 +1,14 @@
-Timer = function(options) {
-	'use strict'
+(function (_global_) {
+	'use strict';
+_global_.Timer = function (options) {
 
 	var defaultOptoins = {
-		tick		: 1,
-		onstart 	: function () {},
-		onstop  	: function () {},
-		onpause 	: function () {},
-		onend   	: function () {},
-		ontick		: function () {}
+		tick    : 1,
+		onstart : function () {},
+		onstop  : function () {},
+		onpause : function () {},
+		onend   : function () {},
+		ontick  : function () {}
 	};
 
 	//extend options with defaultOptoins
@@ -31,23 +32,23 @@ Timer = function(options) {
 		time = {};
 
 	function start(duration) {
-		that.status = 'started';
 		if (!+duration && !that.duration) {
-			end();
-			return;
+			return end();
 		} else {
 			duration *= 1000;
 		}
+		if (timeout && that.status === 'started') return this;
 
 		that.duration = duration = that.duration === 0 ? duration : that.duration;
 		timeout = setTimeout(end, duration);
 		time.start = +new Date();
 		if (options.ontick !== defaultOptoins.ontick) {
 			interval = setInterval(function() {
-				options.ontick(getDuration());
+				options.ontick( getDuration() );
 			}, options.tick * 1000);
 		}
 		options.onstart();
+		that.status = 'started';
 		return this;
 	}
 
@@ -97,7 +98,7 @@ Timer = function(options) {
 
 	function off(option) {
 		if (typeof(option) !== 'string') {
-			return
+			return;
 		} else {
 			option = option.toLowerCase();
 		}
@@ -118,9 +119,10 @@ Timer = function(options) {
 		start 		: start,
 		stop 		: stop,
 		pause 		: pause,
-		on 		: on,
-		off		: off,
+		on 			: on,
+		off			: off,
 		getStatus 	: getStatus,
-		getDuration 	: getDuration
-	}
-}
+		getDuration : getDuration
+	};
+};
+}(this));
