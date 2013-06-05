@@ -1,6 +1,6 @@
-(function (_global_) {
+(function () {
 	'use strict';
-_global_.Timer = function (options) {
+var Timer = function (options) {
 
 	var defaultOptoins = {
 		tick    : 1,
@@ -13,23 +13,24 @@ _global_.Timer = function (options) {
 
 	//extend options with defaultOptoins
 	if (typeof(options) === 'object') {	
-		for (var i in defaultOptoins) {
-			if (!options.hasOwnProperty(i)) {
-				options[i] = defaultOptoins[i];
+		for (var prop in defaultOptoins) {
+			if (!options.hasOwnProperty(prop)) {
+				options[prop] = defaultOptoins[prop];
 			}
 		}
 	} else {
 		options = defaultOptoins;
 	}
 
-	this.id = +new Date();
-	this.duration = 0;
-	this.status = 'initialized';
-
-	var that = this,
+	// private variables
+	var that = {
+			id : +new Date(),
+			duration : 0,
+			status : 'initialized',
+			start : 0
+		},
 		timeout,
-		interval,
-		time = {};
+		interval;
 
 	function start(duration) {
 		if (!+duration && !that.duration) {
@@ -37,15 +38,16 @@ _global_.Timer = function (options) {
 		} else {
 			duration *= 1000;
 		}
+
 		if (timeout && that.status === 'started') return this;
 
 		that.duration = duration = that.duration === 0 ? duration : that.duration;
 		timeout = setTimeout(end, duration);
-		time.start = +new Date();
+		that.start = +new Date();
 		if (options.ontick !== defaultOptoins.ontick) {
 			interval = setInterval(function() {
 				options.ontick( getDuration() );
-			}, options.tick * 1000);
+			}, +options.tick * 1000);
 		}
 		options.onstart();
 		that.status = 'started';
@@ -61,7 +63,7 @@ _global_.Timer = function (options) {
 	}
 
 	function pause() {
-		that.duration = that.duration - (+new Date() - time.start);
+		that.duration = that.duration - (+new Date() - that.start);
 		clearTimeout(timeout);
 		clearInterval(interval);
 		options.onpause();
@@ -82,7 +84,7 @@ _global_.Timer = function (options) {
 	}
 
 	function getDuration() {
-		return Math.round((that.duration - (+new Date() - time.start)) / 1000);
+		return Math.round((that.duration - (+new Date() - that.start)) / 1000);
 	}
 
 	function on(option, value) {
@@ -125,4 +127,17 @@ _global_.Timer = function (options) {
 		getDuration : getDuration
 	};
 };
-}(this));
+	
+	//export Timer for Node or as global variable in browser
+	var root = this;
+
+	if (typeof(exports) !== 'undefined') {
+		if (typeof(module) !== 'undefined' && module.exports) {
+			exports = module.exports = Timer;
+		}
+		exports.Timer = Timer;
+	} else {
+		root.Timer = Timer;
+	}
+
+}).call(this);
