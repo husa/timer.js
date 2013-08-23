@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tim</title>
+    <script type="text/javascript" src="timer.js"></script>
+</head>
+<body>
+
+
+<script type="text/javascript">
+
+// create a new instance of Timer
+// defining options when initialization
+var timer = new Timer({
+        tick : 1,
+        ontick : function (sec) {
+            console.log('interval', sec);
+        },
+        onstart : function() {
+            console.log('timer started')
+        }
+});
+
+// defining options using on
+timer.on('end', function () {
+    console.log('timer ended');
+});
+
+//start timer for 10 seconds
+timer.start(10);
+
+</script>
+</body>
+</html>
