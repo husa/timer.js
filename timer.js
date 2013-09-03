@@ -86,7 +86,7 @@ var Timer = function (options) {
     }
 
     function getDuration() {
-        return Math.round((that.duration - (+new Date() - that.start)) / 1000);
+        return (that.status === 'started') ? Math.round((that.duration - (+new Date() - that.start)) / 1000) : 0;
     }
 
     function on(option, value) {
