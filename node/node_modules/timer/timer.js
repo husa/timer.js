@@ -12,7 +12,7 @@ var Timer = function (options) {
     };
 
     //extend options with defaultOptoins
-    if (typeof(options) === 'object') {
+    if (typeof options === 'object') {
         for (var prop in defaultOptoins) {
             if (!options.hasOwnProperty(prop)) {
                 options[prop] = defaultOptoins[prop];
@@ -33,51 +33,52 @@ var Timer = function (options) {
         interval;
 
     function start(duration) {
+        var instance = this;
+
         if (!+duration && !that.duration) {
-            return end();
+            return end.call(instance);
         } else {
             duration *= 1000;
         }
 
-        if (timeout && that.status === 'started') return this;
+        if (timeout && that.status === 'started') {
+            return this;
+        }
 
         that.duration = duration = that.duration === 0 ? duration : that.duration;
-        timeout = setTimeout(end, duration);
+        timeout = setTimeout(function () {
+            end.call(instance);
+        }, duration);
         that.start = +new Date();
         if (options.ontick !== defaultOptoins.ontick) {
             interval = setInterval(function() {
-                options.ontick( getDuration() );
+                options.ontick.call(instance, getDuration());
             }, +options.tick * 1000);
         }
         that.status = 'started';
-        options.onstart();
+        options.onstart.call(this);
         return this;
     }
 
     function stop() {
-        clearTimeout(timeout);
-        clearInterval(interval);
-        that.duration = 0;
+        clear(true);
         that.status = 'stopped';
-        options.onstop();
+        options.onstop.call(this);
         return this;
     }
 
     function pause() {
         that.duration = that.duration - (+new Date() - that.start);
-        clearTimeout(timeout);
-        clearInterval(interval);
+        clear(false);
         that.status = 'paused';
-        options.onpause();
+        options.onpause.call(this);
         return this;
     }
 
     function end() {
-        clearTimeout(timeout);
-        clearInterval(interval);
-        that.duration = 0;
+        clear(true);
         that.status = 'finished';
-        options.onend();
+        options.onend.call(this);
         return this;
     }
 
@@ -90,7 +91,9 @@ var Timer = function (options) {
     }
 
     function on(option, value) {
-        if (typeof(option) !== 'string' || typeof(value) !== 'function') return;
+        if (typeof option !== 'string' || typeof value !== 'function') {
+            return;
+        }
         if (option.indexOf('on') !== 0) {
             option = 'on' + option;
         }
@@ -101,7 +104,7 @@ var Timer = function (options) {
     }
 
     function off(option) {
-        if (typeof(option) !== 'string') {
+        if (typeof option !== 'string') {
             return;
         } else {
             option = option.toLowerCase();
@@ -119,6 +122,14 @@ var Timer = function (options) {
         return this;
     }
 
+    function clear (clearDuration) {
+        clearTimeout(timeout);
+        clearInterval(interval);
+        if (clearDuration) {
+            that.duration = 0;
+        }
+    }
+
     return {
         start       : start,
         stop        : stop,
@@ -133,8 +144,8 @@ var Timer = function (options) {
     //export Timer for Node or as global variable in browser
     var root = this;
 
-    if (typeof(exports) !== 'undefined') {
-        if (typeof(module) !== 'undefined' && module.exports) {
+    if (typeof exports !== 'undefined') {
+        if (typeof module !== 'undefined' && module.exports) {
             exports = module.exports = Timer;
         }
         exports.Timer = Timer;

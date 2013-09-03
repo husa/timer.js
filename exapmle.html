@@ -24,7 +24,7 @@ var timer = new Timer({
 // defining options using on
 timer.on('end', function () {
     console.log('timer ended');
-    timer.start(4).off('end')
+    this.start(4).off('end')
 });
 
 //start timer for 10 seconds
