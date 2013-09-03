@@ -134,4 +134,6 @@ myTimer.getDuration() // 18
 
 ## TODO
 
-add support for high-performance measuring, something like measureStart() and measureStop() that returns elapsed time in ms between start and stop
+- add support for high-performance measuring, something like measureStart() and measureStop() that returns elapsed time in ms between start and stop
+- add .option() fuction to define multiple options as an objects
+- reword extendinding functionality for defaultOptions
