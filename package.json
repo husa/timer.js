@@ -1,0 +1,25 @@
+{
+  "name": "timer.js",
+  "version": "0.0.1",
+  "description": "Simple and lighweight but powerfull Javascript timer",
+  "main": "timer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/husa/timer.js.git"
+  },
+  "keywords": [
+    "timer",
+    "JavaScript",
+    "Node",
+  ],
+  "author": "Yuriy Husnay",
+  "license": "BSD",
+  "readmeFilename": "readme.md",
+  "gitHead": "6c2c0f77f41b60e7af9bb92c6f0255fbb17dced4",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-copy": "~0.4.1"
+  }
+}
