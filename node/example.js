@@ -1,6 +1,6 @@
 var Timer = require('timer');
 
-t = Timer({
+t = new Timer({
 	ontick : function(sec) {
 		console.log(sec);
 	}

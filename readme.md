@@ -1,5 +1,5 @@
 
-#### Timer.js is lightweight JavaScript library for creating timers with support for browsers and Node.js applications
+#### Timer.js is lightweight(1.5kb) JavaScript library for creating timers with support for browsers and Node.js applications
 
 ## Basic Usage
 
@@ -43,7 +43,7 @@ var myTimer = new Timer(options);
 ```
 
 list of available options:
-* ontick - what to do on every tick 
+* ontick - what to do on every tick
 * tick - set specific tick(e.g. you can set it to 2, then your ontick handler will fire every 2 seconds)
 * onstart - start event handler
 * onstop - stop event handler
@@ -104,6 +104,12 @@ similar to 'on()' but it will remove handler
 
 ```javascript
 myTimer.off('pause')
+```
+
+You can use .off('all') to restore all previously defined options to defaults
+
+```javascript
+myTimer.off('all')
 ```
 
 #### .getStatus()
