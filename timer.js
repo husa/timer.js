@@ -12,7 +12,7 @@ var Timer = function (options) {
 	};
 
 	//extend options with defaultOptoins
-	if (typeof(options) === 'object') {	
+	if (typeof(options) === 'object') {
 		for (var prop in defaultOptoins) {
 			if (!options.hasOwnProperty(prop)) {
 				options[prop] = defaultOptoins[prop];
@@ -49,16 +49,17 @@ var Timer = function (options) {
 				options.ontick( getDuration() );
 			}, +options.tick * 1000);
 		}
+        that.status = 'started';
 		options.onstart();
-		that.status = 'started';
 		return this;
 	}
 
 	function stop() {
 		clearTimeout(timeout);
 		clearInterval(interval);
+        that.duration = 0;
+        that.status = 'stopped';
 		options.onstop();
-		this.status = 'stopped';
 		return this;
 	}
 
@@ -66,16 +67,17 @@ var Timer = function (options) {
 		that.duration = that.duration - (+new Date() - that.start);
 		clearTimeout(timeout);
 		clearInterval(interval);
+        that.status = 'paused';
 		options.onpause();
-		that.status = 'paused';
 		return this;
 	}
 
 	function end() {
 		clearTimeout(timeout);
 		clearInterval(interval);
+        that.duration = 0;
+        that.status = 'finished';
 		options.onend();
-		this.status = 'finished';
 		return this;
 	}
 
@@ -112,7 +114,7 @@ var Timer = function (options) {
 			}
 			if (options.hasOwnProperty(option)) {
 				options[option] = defaultOptoins[option];
-			}	
+			}
 		}
 		return this;
 	}
@@ -127,7 +129,7 @@ var Timer = function (options) {
 		getDuration : getDuration
 	};
 };
-	
+
 	//export Timer for Node or as global variable in browser
 	var root = this;
 
