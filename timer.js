@@ -12,14 +12,17 @@ var Timer = function (options) {
     };
 
     //extend options with defaultOptoins
-    if (typeof options === 'object') {
-        for (var prop in defaultOptoins) {
-            if (!options.hasOwnProperty(prop)) {
-                options[prop] = defaultOptoins[prop];
+    options = extend(defaultOptoins, options);
+
+    function extend(parent, child) {
+        var prop;
+        child = child || {};
+        for (prop in parent) {
+            if (!child.hasOwnProperty(prop)) {
+                child[prop] = parent[prop];
             }
         }
-    } else {
-        options = defaultOptoins;
+        return child;
     }
 
     // private variables
@@ -122,6 +125,11 @@ var Timer = function (options) {
         return this;
     }
 
+    function extendOptions(o) {
+        options = extend(options, o);
+        return this;
+    }
+
     function clear (clearDuration) {
         clearTimeout(timeout);
         clearInterval(interval);
@@ -136,6 +144,7 @@ var Timer = function (options) {
         pause       : pause,
         on          : on,
         off         : off,
+        options     : extendOptions,
         getStatus   : getStatus,
         getDuration : getDuration
     };
