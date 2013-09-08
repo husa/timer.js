@@ -31,6 +31,14 @@ var myTimer = new Timer(); //use it as you want
 
 ## API
 
+All methods listed below support chainig, so you can write your code as:
+
+```javascript
+myTimer.start(10).on('pause', doSmth).pause(); // and so on
+```
+
+Also you can use ```this``` keyword inside of methods as a reference to the instance of Timer
+
 #### initialization
 
 --
@@ -105,6 +113,22 @@ similar to 'on()' but it will remove handler
 myTimer.off('pause')
 ```
 
+#### .options()
+
+define multiple specific options at once as an object
+
+
+```javascript
+myTimer.options({
+    onend : function() {
+        console.log('onend')
+    },
+    ontick : function() {
+        console.log('every tick');
+    }
+})
+```
+
 You can use .off('all') to restore all previously defined options to defaults
 
 ```javascript
@@ -134,5 +158,3 @@ myTimer.getDuration() // 18
 ## TODO
 
 - add support for high-performance measuring, something like measureStart() and measureStop() that returns elapsed time in ms between start and stop
-- add .option() function to define multiple options as an object
-- rework extending functionality for defaultOptions
