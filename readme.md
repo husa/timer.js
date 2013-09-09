@@ -1,5 +1,11 @@
 #### Timer.js is lightweight(1.5kb) JavaScript library for creating timers with support for browsers and Node.js applications
 
+----
+If you've found a bug, something is not working as it shoud be or you came up with some new cool
+feature, feel free to create an issue [here](https://github.com/husa/timer.js/issues "timer.js issues")
+
+----
+
 ## Basic Usage
 
 ### In Browser
@@ -155,6 +161,23 @@ myTimer.start(20)
 myTimer.getDuration() // 18
 ```
 
-## TODO
+#### .measureStart(label)
 
-- add support for high-performance measuring, something like measureStart() and measureStop() that returns elapsed time in ms between start and stop
+Start a high-performance measurement with an associated label, you need to use
+the same label to stop measurement, so be sure you've saved it
+
+#### .measureStop(label)
+
+Stop the measument with the associated label, returns the numbers of elapsed ms
+
+Example
+
+```javascript
+
+myTimer.measureStart('just a stupid loop');
+var a = [];
+for (var i = 10000000; i >= 0; i--) {
+    a.push(i * Math.random());
+};
+var loopTime = myTimer.measureStop('just a stupid loop');
+```
