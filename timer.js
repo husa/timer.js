@@ -30,7 +30,8 @@ var Timer = function (options) {
             id : +new Date(),
             duration : 0,
             status : 'initialized',
-            start : 0
+            start : 0,
+            measures : [],
         },
         timeout,
         interval;
@@ -130,6 +131,21 @@ var Timer = function (options) {
         return this;
     }
 
+    function measureStart(label) {
+        if (!label) {
+            return 'No label passed';
+        }
+        that.measures[label] = +new Date();
+        return this;
+    }
+
+    function measureStop(label) {
+        if (!label) {
+            return 'No label passed';
+        }
+        return +new Date() - that.measures[label];
+    }
+
     function clear (clearDuration) {
         clearTimeout(timeout);
         clearInterval(interval);
@@ -139,14 +155,16 @@ var Timer = function (options) {
     }
 
     return {
-        start       : start,
-        stop        : stop,
-        pause       : pause,
-        on          : on,
-        off         : off,
-        options     : extendOptions,
-        getStatus   : getStatus,
-        getDuration : getDuration
+        start        : start,
+        stop         : stop,
+        pause        : pause,
+        on           : on,
+        off          : off,
+        options      : extendOptions,
+        getStatus    : getStatus,
+        getDuration  : getDuration,
+        measureStart : measureStart,
+        measureStop  : measureStop,
     };
 };
 
