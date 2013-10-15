@@ -6,6 +6,13 @@ feature, feel free to create an issue [here](https://github.com/husa/timer.js/is
 
 ----
 
+### Installation
+
+You can install timer.js with npm
+```
+    npm install timer.js
+```
+
 ## Basic Usage
 
 ### In Browser
