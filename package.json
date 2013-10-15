@@ -13,8 +13,11 @@
   },
   "keywords": [
     "timer",
+    "time",
     "measure",
-    ""
+    "start",
+    "stop",
+    "pause"
   ],
   "author": {
     "name" : "Yuriy Husnay",
