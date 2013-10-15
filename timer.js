@@ -1,5 +1,5 @@
 (function () {
-    'use strict';
+'use strict';
 var Timer = function (options) {
 
     var defaultOptoins = {
@@ -56,18 +56,18 @@ var Timer = function (options) {
         that.start = +new Date();
         if (options.ontick !== defaultOptoins.ontick) {
             interval = setInterval(function() {
-                options.ontick.call(instance, getDuration());
+                fireEvent('ontick', instance, [getDuration()]);
             }, +options.tick * 1000);
         }
         that.status = 'started';
-        options.onstart.call(this);
+        fireEvent('onstart', this);
         return this;
     }
 
     function stop() {
         clear(true);
         that.status = 'stopped';
-        options.onstop.call(this);
+        fireEvent('onstop', this);
         return this;
     }
 
@@ -75,14 +75,14 @@ var Timer = function (options) {
         that.duration = that.duration - (+new Date() - that.start);
         clear(false);
         that.status = 'paused';
-        options.onpause.call(this);
+        fireEvent('onpause', this);
         return this;
     }
 
     function end() {
         clear(true);
         that.status = 'finished';
-        options.onend.call(this);
+        fireEvent('onend', this);
         return this;
     }
 
@@ -154,6 +154,10 @@ var Timer = function (options) {
         }
     }
 
+    function fireEvent (event, scope, params) {
+        options[event].apply(scope, params);
+    }
+
     return {
         start        : start,
         stop         : stop,
@@ -168,15 +172,18 @@ var Timer = function (options) {
     };
 };
 
-    //export Timer for Node or as global variable in browser
+    //export Timer as module or as global variable
     var root = this;
 
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
+    if (typeof(exports) !== 'undefined') {
+        if (typeof(module) !== 'undefined' && module.exports) {
             exports = module.exports = Timer;
         }
         exports.Timer = Timer;
     } else {
+        if (typeof define === 'function' && define.amd) {
+            define('Timer', [], function(){ return Timer; });
+        }
         root.Timer = Timer;
     }
 
