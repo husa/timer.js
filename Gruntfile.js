@@ -11,17 +11,10 @@ module.exports = function(grunt) {
       }
     },
 
-    copy : {
-      main : {
-        src : 'timer.js',
-        dest : 'node/node_modules/timer/'
-      }
-    },
-
     watch : {
        scripts: {
         files: ['timer.js'],
-        tasks: ['uglify', 'copy'],
+        tasks: ['uglify'],
         options: {
           nospawn: true,
         },
@@ -33,7 +26,6 @@ module.exports = function(grunt) {
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task(s).
   grunt.registerTask('default', ['watch']);
