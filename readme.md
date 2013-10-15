@@ -1,4 +1,4 @@
-#### Timer.js is lightweight(1.5kb) JavaScript library for creating timers with support for browsers and Node.js applications
+#### Timer.js is lightweight(1.9kb) JavaScript library for creating timers, supporting browsers and Node.js applications
 
 ----
 If you've found a bug, something is not working as it shoud be or you came up with some new cool
@@ -22,18 +22,25 @@ And later somewhere in your script
 var myTimer = new Timer();
 ```
 
-### Node.js
+### Modular
 
-First you have to include 'timer' folder from '/node/node_modules' and import it to your 'node_modules'
+#### CommonJS(Node)
 
 ```JavaScript
-var Timer = require('timer'); // import timer
+var Timer = require('./timer'); // import timer
 
 var myTimer = new Timer(); //use it as you want
 
 ```
+#### AMD
 
+```JavaScript
 
+define(['timer'], function(Timer){
+    var myTimer = new Timer(); //use it as you want
+})
+
+```
 
 ## API
 
