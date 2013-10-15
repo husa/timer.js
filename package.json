@@ -1,5 +1,5 @@
 {
-  "name": "timerjs",
+  "name": "timer.js",
   "version": "0.2.0",
   "description": "Simple and lighweight but powerfull eventdriven JavaScript timer",
   "main": "timer.js",
@@ -12,7 +12,7 @@
     "email" : "husnaj23@gmail.com"
   },
   "keywords": [
-    "timerjs",
+    "timer.js",
     "timer",
     "time",
     "measure",
