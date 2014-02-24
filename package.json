@@ -24,7 +24,7 @@
     "name": "Yuriy Husnay",
     "email": "husnaj23@gmail.com"
   },
-  "license": "BSD",
+  "license": "MIT",
   "readmeFilename": "readme.md",
   "gitHead": "6c2c0f77f41b60e7af9bb92c6f0255fbb17dced4",
   "devDependencies": {
