@@ -1,190 +1,140 @@
-(function () {
-'use strict';
-var Timer = function (options) {
+(function(root, factory){
+  if (typeof define === 'function' && define.amd)
+    define([], factory)
+  else if (typeof exports === 'object')
+    module.exports = factory()
+  else
+    root.Timer = factory()
+}(this, function(){
+  'use strict'
 
-    var defaultOptoins = {
-        tick    : 1,
-        onstart : function () {},
-        onstop  : function () {},
-        onpause : function () {},
-        onend   : function () {},
-        ontick  : function () {}
-    };
+  var defaultOptions = {
+    tick    : 1,
+    onstart : null,
+    ontick  : null,
+    onpause : null,
+    onstop  : null,
+    onend   : null
+  }
 
-    //extend options with defaultOptoins
-    options = extend(defaultOptoins, options);
+  var Timer = function (options) {
+    if (!(this instanceof Timer)) return new Timer(options)
+    this._ = {
+        id       : +new Date(),
+        options  : {},
+        duration : 0,
+        status   : 'initialized',
+        start    : 0,
+        measures : []
+      }
+    for (var prop in defaultOptions)
+      this._.options[prop] = defaultOptions[prop]
+    this.options(options)
+  }
 
-    function extend(parent, child) {
-        var prop;
-        child = child || {};
-        for (prop in parent) {
-            if (!child.hasOwnProperty(prop)) {
-                child[prop] = parent[prop];
-            }
-        }
-        return child;
+  Timer.prototype.start = function(duration) {
+      var instance = this
+      if (!+duration && !this._.duration)
+        return this._end()
+      else
+        duration *= 1000
+      if (this._.timeout && this._.status === 'started')
+        return this
+      this._.duration || (this._.duration = duration)
+      this._.timeout = setTimeout(function(){
+        instance._end.call(instance)
+      }, this._.duration)
+      if (this._.options.ontick !== defaultOptions.ontick)
+        this._.interval = setInterval(function() {
+          instance._trigger('ontick', instance, [instance.getDuration()])
+        }, +this._.options.tick * 1000)
+      this._.start = +new Date()
+      this._.status = 'started'
+      this._trigger('onstart', this, [this.getDuration()])
+      return this
     }
 
-    // private variables
-    var that = {
-            id : +new Date(),
-            duration : 0,
-            status : 'initialized',
-            start : 0,
-            measures : [],
-        },
-        timeout,
-        interval;
+  Timer.prototype.pause = function() {
+    this._.duration -= (+new Date() - this._.start)
+    this._clear(false)
+    this._.status = 'paused'
+    this._trigger('onpause', this)
+    return this
+  }
 
-    function start(duration) {
-        var instance = this;
+  Timer.prototype.stop = function() {
+    this._clear(true)
+    this._.status = 'stopped'
+    this._trigger('onstop', this)
+    return this
+  }
 
-        if (!+duration && !that.duration) {
-            return end.call(instance);
-        } else {
-            duration *= 1000;
-        }
+  Timer.prototype._end = function() {
+    this._clear(true)
+    this._.status = 'finished'
+    this._trigger('onend', this)
+    return this
+  }
 
-        if (timeout && that.status === 'started') {
-            return this;
-        }
+  Timer.prototype._clear = function(clearDuration) {
+    clearTimeout(this._.timeout)
+    clearInterval(this._.interval)
+    if (clearDuration)
+      this._.duration = 0
+  }
 
-        that.duration = duration = that.duration === 0 ? duration : that.duration;
-        timeout = setTimeout(function () {
-            end.call(instance);
-        }, duration);
-        that.start = +new Date();
-        if (options.ontick !== defaultOptoins.ontick) {
-            interval = setInterval(function() {
-                fireEvent('ontick', instance, [getDuration()]);
-            }, +options.tick * 1000);
-        }
-        that.status = 'started';
-        fireEvent('onstart', this);
-        return this;
+  Timer.prototype._trigger = function(event, scope, params) {
+    typeof this._.options[event] === 'function' && this._.options[event].apply(scope, params)
+  }
+
+  Timer.prototype.getDuration = function() {
+    if (this._.status !== 'started') return 0
+    return Math.round((this._.duration - (+new Date() - this._.start)) / 1000)
+  }
+
+  Timer.prototype.getStatus = function() {
+    return this._.status
+  }
+
+  Timer.prototype.options = function(option, value) {
+    if (option && value) this._.options[option] = value
+    if (!value && typeof option === 'object')
+      for (var prop in option)
+        if (this._.options.hasOwnProperty(prop))
+          this._.options[prop] = option[prop]
+    return this
+  }
+
+  Timer.prototype.on = function(option, value) {
+    if (typeof option !== 'string' || typeof value !== 'function') return
+    if (!(/^on/).test(option))
+      option = 'on' + option
+    if (this._.options.hasOwnProperty(option))
+      this._.options[option] = value
+    return this
+  }
+
+  Timer.prototype.off = function(option) {
+    if (typeof option !== 'string') return
+    option = option.toLowerCase()
+    if (option === 'all') {
+      this._.options = defaultOptions
+      return
     }
+    if (!(/^on/).test(option)) option = 'on' + option
+    if (this._.options.hasOwnProperty(option))
+      this._.options[option] = defaultOptions[option]
+    return this
+  }
 
-    function stop() {
-        clear(true);
-        that.status = 'stopped';
-        fireEvent('onstop', this);
-        return this;
-    }
+  Timer.prototype.measureStart = function(label) {
+    this._.measures[label || ''] = +new Date()
+    return this
+  }
 
-    function pause() {
-        that.duration = that.duration - (+new Date() - that.start);
-        clear(false);
-        that.status = 'paused';
-        fireEvent('onpause', this);
-        return this;
-    }
+  Timer.prototype.measureStop = function(label) {
+    return +new Date() - this._.measures[label || '']
+  }
 
-    function end() {
-        clear(true);
-        that.status = 'finished';
-        fireEvent('onend', this);
-        return this;
-    }
-
-    function getStatus() {
-        return that.status;
-    }
-
-    function getDuration() {
-        return (that.status === 'started') ? Math.round((that.duration - (+new Date() - that.start)) / 1000) : 0;
-    }
-
-    function on(option, value) {
-        if (typeof option !== 'string' || typeof value !== 'function') {
-            return;
-        }
-        if (option.indexOf('on') !== 0) {
-            option = 'on' + option;
-        }
-        if (options.hasOwnProperty(option)) {
-            options[option] = value;
-        }
-        return this;
-    }
-
-    function off(option) {
-        if (typeof option !== 'string') {
-            return;
-        } else {
-            option = option.toLowerCase();
-        }
-        if (option === 'all') {
-            options = defaultOptoins;
-        } else {
-            if (option.indexOf('on') !== 0) {
-                option = 'on' + option;
-            }
-            if (options.hasOwnProperty(option)) {
-                options[option] = defaultOptoins[option];
-            }
-        }
-        return this;
-    }
-
-    function extendOptions(o) {
-        options = extend(options, o);
-        return this;
-    }
-
-    function measureStart(label) {
-        if (!label) {
-            return 'No label passed';
-        }
-        that.measures[label] = +new Date();
-        return this;
-    }
-
-    function measureStop(label) {
-        if (!label) {
-            return 'No label passed';
-        }
-        return +new Date() - that.measures[label];
-    }
-
-    function clear (clearDuration) {
-        clearTimeout(timeout);
-        clearInterval(interval);
-        if (clearDuration) {
-            that.duration = 0;
-        }
-    }
-
-    function fireEvent (event, scope, params) {
-        options[event].apply(scope, params);
-    }
-
-    return {
-        start        : start,
-        stop         : stop,
-        pause        : pause,
-        on           : on,
-        off          : off,
-        options      : extendOptions,
-        getStatus    : getStatus,
-        getDuration  : getDuration,
-        measureStart : measureStart,
-        measureStop  : measureStop,
-    };
-};
-
-    //export Timer as module or as global variable
-    var root = this;
-
-    if (typeof(exports) !== 'undefined') {
-        if (typeof(module) !== 'undefined' && module.exports) {
-            exports = module.exports = Timer;
-        }
-        exports.Timer = Timer;
-    } else {
-        if (typeof define === 'function' && define.amd) {
-            define('Timer', [], function(){ return Timer; });
-        }
-        root.Timer = Timer;
-    }
-
-}).call(this);
+  return Timer
+}))
