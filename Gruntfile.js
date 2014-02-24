@@ -11,10 +11,21 @@ module.exports = function(grunt) {
       }
     },
 
+    compress : {
+        options : {
+            mode : 'gzip',
+            pretty: true
+        },
+        files : {
+            src : 'timer.min.js',
+            dest : 'timer.min.js.gz'
+        }
+    },
+
     watch : {
        scripts: {
         files: ['timer.js'],
-        tasks: ['uglify'],
+        tasks: ['uglify', 'compress'],
         options: {
           nospawn: true,
         },
@@ -26,6 +37,7 @@ module.exports = function(grunt) {
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-compress');
 
   // Default task(s).
   grunt.registerTask('default', ['watch']);

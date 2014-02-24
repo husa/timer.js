@@ -9,7 +9,7 @@
   },
   "bugs": {
     "url": "http://github.com/husa/timer.js/issues",
-    "email" : "husnaj23@gmail.com"
+    "email": "husnaj23@gmail.com"
   },
   "keywords": [
     "timer.js",
@@ -21,8 +21,8 @@
     "pause"
   ],
   "author": {
-    "name" : "Yuriy Husnay",
-    "email" : "husnaj23@gmail.com"
+    "name": "Yuriy Husnay",
+    "email": "husnaj23@gmail.com"
   },
   "license": "BSD",
   "readmeFilename": "readme.md",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "grunt": "*",
     "grunt-contrib-watch": "*",
-    "grunt-contrib-uglify": "*"
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-compress": "~0.7.0"
   }
 }
