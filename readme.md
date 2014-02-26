@@ -1,5 +1,8 @@
 #### Timer.js is lightweight(1.9kb) JavaScript library for creating timers, supporting browsers and Node.js applications
 
+
+[demo page](https://husa.github.io/timer.js)
+
 ----
 If you've found a bug, something is not working as it shoud be or you came up with some new cool
 feature, feel free to create an issue [here](https://github.com/husa/timer.js/issues "timer.js issues")
