@@ -6,40 +6,46 @@ module.exports = function(grunt) {
 
     uglify: {
       build: {
-        src: 'timer.js',
-        dest: 'timer.min.js'
+        src: 'dist/timer.js',
+        dest: 'dist/timer.min.js'
       }
     },
 
     compress : {
+      build: {
         options : {
             mode : 'gzip',
             pretty: true
         },
-        files : {
-            src : 'timer.min.js',
-            dest : 'timer.min.js.gz'
-        }
+        src : 'dist/timer.min.js',
+        dest : 'dist/timer.min.js.gz'
+      }
+    },
+
+    copy : {
+      build : {
+        src  : 'src/timer.js',
+        dest : 'dist/timer.js'
+      }
     },
 
     watch : {
        scripts: {
-        files: ['timer.js'],
-        tasks: ['uglify', 'compress'],
+        files: ['src/timer.js'],
+        tasks: ['copy', 'uglify', 'compress'],
         options: {
           nospawn: true,
         },
       }
     }
-
   });
 
-  // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  // Default task(s).
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['build', 'watch']);
+  grunt.registerTask('build', ['copy', 'uglify', 'compress']);
 
 };
