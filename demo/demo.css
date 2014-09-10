@@ -1,9 +1,11 @@
 @import url(http://weloveiconfonts.com/api/?family=fontawesome);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
+@import url(http://fonts.googleapis.com/css?family=Raleway:100);
 
 body {
     font-family: "Open Sans", Arial, sans-serif;
     font-size: 1em;
+    font-weight: 400;
     margin: 0;
     padding: 0;
     border: none;
@@ -11,13 +13,18 @@ body {
 }
 
 .container {
-    width: 100%
+    width: 100%;
+    background: -webkit-linear-gradient(90deg, #4CB8C4 10%, #3CD3AD 90%); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient(90deg, #4CB8C4 10%, #3CD3AD 90%); /* FF3.6+ */
+    background:     -ms-linear-gradient(90deg, #4CB8C4 10%, #3CD3AD 90%); /* IE10 */
+    background:      -o-linear-gradient(90deg, #4CB8C4 10%, #3CD3AD 90%); /* Opera 11.10+ */
+    background:         linear-gradient(90deg, #4CB8C4 10%, #3CD3AD 90%); /* W3C */
 }
 
 .section {
     padding: 20px 10px;
-    background-color: #34495E;
-    color: #ECF0F1
+    color: #34495E;
+    background-color: #ECF0F1;
 }
 
 .content {
@@ -25,12 +32,17 @@ body {
     margin: 0 auto
 }
 
+.content h3 {
+    font-weight: 300;
+    font-size: 2em;
+}
+
 a {
     color: inherit
 }
 
 pre {
-    background: #2C3E50;
+    background: rgba(44, 62, 80, .1);
     padding: 4px;
     overflow: auto;
     -moz-border-radius: 3px;
@@ -43,18 +55,28 @@ iframe {
 }
 
 .title-wrapper {
-    background-color: #34495E;
-    color: #ECF0F1
+    background: none;
+    color: #ECF0F1;
 }
 
 .title-wrapper h1, .title-wrapper h4 {
     float: none;
     text-align: center;
-    display: block
+    display: block;
+    font-weight: 400;
+    font-size: 1.2em;
 }
 
 .title-wrapper h1 {
-    font-size: 3em
+    font-size: 7em;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
+    margin: 80px 0;
+}
+@media (max-width: 500px) {
+    .title-wrapper h1 {
+        font-size: 5em;
+    }
 }
 
 .title-wrapper .github-buttons {
@@ -63,8 +85,8 @@ iframe {
 
 .demo-wrapper {
     text-align: center;
-    background-color: #1ABC9C;
-    color: #2C3E50
+    background: none;
+    color: #ECF0F1;
 }
 
 .demo-wrapper .time-input {
@@ -109,19 +131,14 @@ iframe {
 }
 
 .demo-wrapper .buttons .button:hover {
-    color: #46627f
+    color: #46627f;
 }
 
 .demo-wrapper .timer {
     font-size: 8em;
-    font-weight: bold
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
 }
-@media (max-width: 500px) {
-    .demo-wrapper .timer {
-        font-size: 5em;
-    }
-}
-
 .contact-info {
-    background-color: #2C3E50
+    background: none;
 }
