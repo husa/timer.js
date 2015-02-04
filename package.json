@@ -11,6 +11,9 @@
     "url": "http://github.com/husa/timer.js/issues",
     "email": "husnaj23@gmail.com"
   },
+  "scripts" : {
+    "test" : "grunt test"
+  },
   "keywords": [
     "timer.js",
     "timer",
