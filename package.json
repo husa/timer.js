@@ -32,6 +32,7 @@
     "grunt-contrib-compress": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-jasmine": "^0.8.2"
   }
 }
