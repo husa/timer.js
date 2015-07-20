@@ -63,8 +63,10 @@
   }
 
   Timer.prototype.getDuration = function () {
-    if (this._.status !== 'started') return 0
-    return Math.round((this._.duration - (+new Date - this._.start)) / 1000)
+    if (this._.status === 'started')
+      return this._.duration - (+new Date - this._.start)
+    if (this._.status === 'paused') return this._.duration
+    return 0
   }
 
   Timer.prototype.getStatus = function () {

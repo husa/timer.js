@@ -12,7 +12,14 @@ describe('Timer', function() {
     stop = jasmine.createSpy();
     tick = jasmine.createSpy();
     end = jasmine.createSpy();
+
+    jasmine.clock().install();
+    jasmine.clock().mockDate();
   });
+
+  afterEach(function(){
+    jasmine.clock().uninstall();
+  })
 
   it('should be available as global', function() {
     expect(Timer).toBeDefined();
@@ -60,29 +67,32 @@ describe('Timer', function() {
 
   describe('#getDuration', function() {
 
-    it('should return 0 if timer isn\'t started', function(){
+    it('should return 0 if timer isn\'t started or paused', function() {
       //initial
       expect(timer.getDuration()).toEqual(0);
       //after start
       timer.start(10);
-      expect(timer.getDuration()).not.toEqual(0);
+      expect(timer.getDuration()).toEqual(10000);
       //after pause
       timer.pause();
-      expect(timer.getDuration()).toEqual(0);
-      //after start
-      timer.start();
-      expect(timer.getDuration()).not.toEqual(0);
+      expect(timer.getDuration()).toEqual(10000);
       //after stop
       timer.stop();
       expect(timer.getDuration()).toEqual(0);
     });
 
-    it('should return actual value', function(done) {
+    it('should return actual value', function() {
       timer.start(10);
-      setTimeout(function() {
-        expect(timer.getDuration()).toEqual(9);
-        done();
-      }, 1000);
+      jasmine.clock().tick(100);
+      expect(timer.getDuration()).toEqual(9900);
+      jasmine.clock().tick(1100);
+      expect(timer.getDuration()).toEqual(8800);
+      timer.pause();
+      jasmine.clock().tick(100);
+      expect(timer.getDuration()).toEqual(8800);
+      timer.start();
+      jasmine.clock().tick(100);
+      expect(timer.getDuration()).toEqual(8700);
     });
   });
 
@@ -107,7 +117,7 @@ describe('Timer', function() {
       timer.on('start', start);
       timer.start(1);
       expect(start).toHaveBeenCalled();
-      expect(start).toHaveBeenCalledWith(1);
+      expect(start).toHaveBeenCalledWith(1000);
     });
   });
 
@@ -174,14 +184,6 @@ describe('Timer', function() {
 
   describe('#on', function() {
 
-    beforeEach(function(){
-      jasmine.clock().install();
-    });
-
-    afterEach(function() {
-      jasmine.clock().uninstall();
-    });
-
     it('should attach start callback', function() {
       timer.on('start', start);
       timer.start(1);
@@ -232,7 +234,6 @@ describe('Timer', function() {
   describe('#off', function() {
 
     beforeEach(function() {
-      jasmine.clock().install();
       timer.on('tick', tick);
       timer.on('onstart', start);
       timer.on('stop', stop);
@@ -264,7 +265,6 @@ describe('Timer', function() {
   describe('#callbacks execution', function() {
 
     beforeEach(function(){
-      jasmine.clock().install();
       timer.options({
         onstart : start,
         ontick : tick,
