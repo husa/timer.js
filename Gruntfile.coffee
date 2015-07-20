@@ -21,6 +21,12 @@ module.exports = ->
         src: 'src/timer.js'
         dest: 'dist/timer.js'
 
+    eslint:
+      options:
+        config: '.eslintrc'
+      source:
+        src: ['src/timer.js']
+
     jasmine:
       options:
           specs: 'test/specs/*.js'
@@ -32,13 +38,14 @@ module.exports = ->
     watch:
       scripts:
         files: ['src/timer.js', 'test/**/*.js']
-        tasks: ['jasmine:source']
+        tasks: ['eslint:source', 'jasmine:source']
 
   @loadNpmTasks 'grunt-contrib-uglify'
   @loadNpmTasks 'grunt-contrib-watch'
   @loadNpmTasks 'grunt-contrib-compress'
   @loadNpmTasks 'grunt-contrib-copy'
   @loadNpmTasks 'grunt-contrib-jasmine'
+  @loadNpmTasks 'grunt-contrib-eslint'
 
   @registerTask 'default', [
     'build'
@@ -51,6 +58,7 @@ module.exports = ->
   ]
 
   @registerTask 'build', [
+    'eslint:source'
     'jasmine:source'
     'copy'
     'uglify'
