@@ -1,6 +1,6 @@
 {
   "name": "timer.js",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Simple and lighweight but powerfull eventdriven JavaScript timer",
   "main": "timer.js",
   "repository": {
