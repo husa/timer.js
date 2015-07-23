@@ -11,6 +11,9 @@
     "url": "http://github.com/husa/timer.js/issues",
     "email": "husnaj23@gmail.com"
   },
+  "scripts": {
+    "test": "grunt test"
+  },
   "keywords": [
     "timer.js",
     "timer",
@@ -31,6 +34,8 @@
     "grunt": "~0.4.2",
     "grunt-contrib-compress": "*",
     "grunt-contrib-copy": "*",
+    "grunt-contrib-eslint": "0.0.5",
+    "grunt-contrib-jasmine": "^0.8.2",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*"
   }
