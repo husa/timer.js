@@ -1,60 +1,41 @@
-#### Timer.js is lightweight(1.9kb) JavaScript library for creating timers, supporting browsers and Node.js applications
+# Timer.js
+[![Build Status](https://travis-ci.org/husa/timer.js.svg?branch=master)](https://travis-ci.org/husa/timer.js)
 
 
-[demo page](https://husa.github.io/timer.js)
+Simple and lightweight library without any dependencies
+ to create and manage, well, _timers_.
 
-----
-If you've found a bug, something is not working as it shoud be or you came up with some new cool
-feature, feel free to create an issue [here](http://github.com/husa/timer.js/issues "timer.js issues")
-
-----
+[Demo](https://husa.github.io/timer.js)
 
 ### Installation
 
-You can install timer.js with npm
+The easiest way to install timer.js is via ```npm```
 ```
     npm install timer.js
 ```
+or if you prefer good old files,
+you can manually download [dev](https://raw.githubusercontent.com/husa/timer.js/master/dist/timer.js) or [min](https://raw.githubusercontent.com/husa/timer.js/master/dist/timer.min.js) versions.
 
-## Basic Usage
 
-### In Browser
+### Examples
 
-To start using Timer.js in your client scripts you first have to include library
-
-```
-<script src="somepath/timer.js"></script>
-```
-
-And later somewhere in your script
-
+Let's cook pizza
 ```javascript
-var myTimer = new Timer();
+var pizzaTimer = new Timer();
+var pizzaCookingTime = 15 * 60; // 15 minutes
+
+timer.start(pizzaCookingTime).on('end', function () {
+  alert('Pizza is ready, bon appetit!');
+});
 ```
 
-### Modular
+### Usage
 
-#### CommonJS(Node)
+Timer.js is written in ```UMD``` style, so it's compatible with AMD(Require.js), CommonJS(nodejs, browserify, etc.) and direct browser usage as a global.
 
-```JavaScript
-var Timer = require('./timer'); // import timer
+### API
 
-var myTimer = new Timer(); //use it as you want
-
-```
-#### AMD
-
-```JavaScript
-
-define(['timer'], function(Timer){
-    var myTimer = new Timer(); //use it as you want
-})
-
-```
-
-## API
-
-All methods listed below support chainig, so you can write your code as:
+All methods listed below support chaining, so you can write:
 
 ```javascript
 myTimer.start(10).on('pause', doSmth).pause(); // and so on
@@ -63,10 +44,7 @@ myTimer.start(10).on('pause', doSmth).pause(); // and so on
 Also you can use ```this``` keyword inside of methods as a reference to the instance of Timer
 
 #### initialization
-
---
-
-To create Timer with specific event handlers and options you can
+To create Timer with specific event handlers and options you can pass them as argument to constructor
 
 ```javascript
 var myTimer = new Timer(options);
@@ -82,17 +60,17 @@ list of available options:
 
 ```javascript
 var myTimer = new Timer({
-	tick    : 1,
-	ontick  : function(sec) { console.log(sec + ' seconds left') },
-	onstart : function() { console.log('timer started') },
-	onstop  : function() { console.log('timer stop') },
-	onpause : function() { console.log('timer set on pause') },
-	onend   : function() { console.log('timer ended normally') }
+  tick    : 1,
+  ontick  : function(sec) { console.log(sec + ' seconds left') },
+  onstart : function() { console.log('timer started') },
+  onstop  : function() { console.log('timer stop') },
+  onpause : function() { console.log('timer set on pause') },
+  onend   : function() { console.log('timer ended normally') }
 });
 ```
 
 
-#### .start(time)
+#### ```.start(time)```
 
 starts a Timer for a specified time
 
@@ -100,16 +78,16 @@ starts a Timer for a specified time
 myTimer.start(10) // start a timer for 10 seconds
 ```
 
-#### .pause()
+#### ```.pause()```
 
-set timer on pause
+pause timer
 
 ```javascript
 myTimer.pause()
 ```
-after pause you can continue job by ```myTimer.start()```
+after pause you can continue the job by ```myTimer.start()```
 
-#### .stop()
+#### ```.stop()```
 
 to stop timer doing his job
 
@@ -117,18 +95,18 @@ to stop timer doing his job
 myTimer.stop()
 ```
 
-#### .on(option, function)
+#### ```.on(option, function)```
 
-set some specific option
+set some specific option,
 support options without 'on' prefix. Available options are : ```tick, ontick, start, onstart, end, onend, stop, onstop, pause, onpause```
 
 ```javascript
 myTimer.on('end', function() {
-	console.log('woo-hooo! my timer ended normally')
+  console.log('woo-hooo! my timer ended normally')
 })
 ```
 
-#### .off()
+#### ```.off()```
 
 similar to 'on()' but it will remove handler
 
@@ -136,7 +114,7 @@ similar to 'on()' but it will remove handler
 myTimer.off('pause')
 ```
 
-#### .options()
+#### ```.options()```
 
 define multiple specific options at once as an object
 
@@ -158,9 +136,9 @@ You can use .off('all') to restore all previously defined options to defaults
 myTimer.off('all')
 ```
 
-#### .getStatus()
+#### ```.getStatus()```
 
-get current status of timer. Available statuses are: ``` 'initialized', 'started', 'paused', 'stopped', 'finished' ```
+get current status of timer. Available statuses are: ```'initialized', 'started', 'paused', 'stopped'```
 
 ```JavaScript
 myTimer.getStatus() // 'initialized'
@@ -168,22 +146,22 @@ myTimer.start(20).getStatus() // 'started'
 myTimer.pause().getStatus() // 'paused'
 ```
 
-#### .getDuration()
+#### ```.getDuration()```
 
-get remaining time(in seconds)
+get remaining time(in ms)
 
 ```JavaScript
 myTimer.start(20)
 // some operations that lasts for 2 seconds
-myTimer.getDuration() // 18
+myTimer.getDuration() // 18000
 ```
 
-#### .measureStart(label)
+#### ```.measureStart(label)```
 
 Start a high-performance measurement with an associated label, you need to use
-the same label to stop measurement, so be sure you've saved it
+the same label to stop measurement, so make sure you've saved it
 
-#### .measureStop(label)
+#### ```.measureStop(label)```
 
 Stop the measument with the associated label, returns the numbers of elapsed ms
 
@@ -191,10 +169,36 @@ Example
 
 ```javascript
 
-myTimer.measureStart('just a stupid loop');
+myTimer.measureStart('label1');
 var a = [];
 for (var i = 10000000; i >= 0; i--) {
     a.push(i * Math.random());
 };
-var loopTime = myTimer.measureStop('just a stupid loop');
+myTimer.measureStop('label1'); // 276 i.e.
 ```
+
+> Note!
+> '' (empty string) equals to absence of argument, and it is valid
+> ```
+> timer.measureStart();
+> //some operations
+> timer.measureStop();
+> ```
+> will work
+
+## Tests
+Running tests is pretty straightforward
+```
+npm test
+```
+Tests are written with Jasmine, you can find all specs in ```test/specs``` folder.
+
+
+## Contributing
+
+If you've found a bug, something is not working as it shoud be or you came up with some new cool
+feature, feel free to create an issue [here](http://github.com/husa/timer.js/issues "timer.js issues")
+or send a pull request.
+
+
+## Changelog
