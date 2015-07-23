@@ -2,7 +2,7 @@
   "name": "timer.js",
   "version": "1.0.0",
   "description": "Simple and lighweight but powerfull eventdriven JavaScript timer",
-  "main": "timer.js",
+  "main": "dist/timer.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/husa/timer.js.git"
