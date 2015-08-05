@@ -119,6 +119,35 @@ describe('Timer', function() {
       expect(start).toHaveBeenCalled();
       expect(start).toHaveBeenCalledWith(1000);
     });
+
+    it('should resume timer after pause', function() {
+      timer.on('end', end);
+      timer.start(5);
+      jasmine.clock().tick(1000);
+      timer.pause();
+      expect(timer.getStatus()).toBe('paused');
+      timer.start();
+      expect(timer.getStatus()).toBe('started');
+      jasmine.clock().tick(3900);
+      expect(timer.getDuration()).toBe(100);
+      jasmine.clock().tick(101);
+      expect(end).toHaveBeenCalled();
+    });
+
+    it('should restart timer if argument provided after pause', function () {
+      timer.on('end', end);
+      timer.start(5);
+      jasmine.clock().tick(1000);
+      timer.pause();
+      expect(timer.getStatus()).toBe('paused');
+      timer.start(10);
+      expect(timer.getDuration()).toBe(10000);
+      jasmine.clock().tick(4001);
+      expect(end).not.toHaveBeenCalled();
+      expect(timer.getDuration()).toBe(5999);
+      jasmine.clock().tick(6000);
+      expect(end).toHaveBeenCalled();
+    });
   });
 
   describe('#pause', function() {
