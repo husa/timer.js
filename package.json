@@ -34,9 +34,9 @@
     "grunt": "~0.4.2",
     "grunt-contrib-compress": "*",
     "grunt-contrib-copy": "*",
-    "grunt-contrib-eslint": "0.0.5",
     "grunt-contrib-jasmine": "^0.8.2",
     "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "gruntify-eslint": "^1.0.0"
   }
 }

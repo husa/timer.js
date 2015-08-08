@@ -18,13 +18,13 @@
   var Timer = function (options) {
     if (!(this instanceof Timer)) return new Timer(options)
     this._ = {
-        id       : +new Date,
-        options  : {},
-        duration : 0,
-        status   : 'initialized',
-        start    : 0,
-        measures : []
-      }
+      id       : +new Date,
+      options  : {},
+      duration : 0,
+      status   : 'initialized',
+      start    : 0,
+      measures : []
+    }
     for (var prop in defaultOptions) this._.options[prop] = defaultOptions[prop]
     this.options(options)
   }

@@ -45,7 +45,7 @@ module.exports = ->
   @loadNpmTasks 'grunt-contrib-compress'
   @loadNpmTasks 'grunt-contrib-copy'
   @loadNpmTasks 'grunt-contrib-jasmine'
-  @loadNpmTasks 'grunt-contrib-eslint'
+  @loadNpmTasks 'gruntify-eslint'
 
   @registerTask 'default', [
     'build'
