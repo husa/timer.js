@@ -31,9 +31,9 @@
 
   Timer.prototype.start = function (duration) {
       if (!+duration && !this._.duration) return this
-      duration *= 1000
+      duration && (duration *= 1000)
       if (this._.timeout && this._.status === 'started') return this
-      this._.duration || (this._.duration = duration)
+      this._.duration = duration || this._.duration
       this._.timeout = setTimeout(end.bind(this), this._.duration)
       if (typeof this._.options.ontick === 'function')
         this._.interval = setInterval(function () {
