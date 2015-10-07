@@ -7,10 +7,12 @@
             $timer = $('.timer');
 
         var timer = new Timer({
-            onstart : function(sec) {
+            onstart : function(millisec) {
+                var sec = Math.round(millisec / 1000);
                 $timer.text(sec);
             },
-            ontick  : function(sec) {
+            ontick  : function(millisec) {
+                var sec = Math.round(millisec / 1000);
                 $timer.text(sec);
             },
             onpause : function() {
