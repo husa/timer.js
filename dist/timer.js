@@ -30,20 +30,20 @@
   }
 
   Timer.prototype.start = function (duration) {
-      if (!+duration && !this._.duration) return this
-      duration && (duration *= 1000)
-      if (this._.timeout && this._.status === 'started') return this
-      this._.duration = duration || this._.duration
-      this._.timeout = setTimeout(end.bind(this), this._.duration)
-      if (typeof this._.options.ontick === 'function')
-        this._.interval = setInterval(function () {
-          trigger.call(this, 'ontick', this.getDuration())
-        }.bind(this), +this._.options.tick * 1000)
-      this._.start = +new Date
-      this._.status = 'started'
-      trigger.call(this, 'onstart', this.getDuration())
-      return this
-    }
+    if (!+duration && !this._.duration) return this
+    duration && (duration *= 1000)
+    if (this._.timeout && this._.status === 'started') return this
+    this._.duration = duration || this._.duration
+    this._.timeout = setTimeout(end.bind(this), this._.duration)
+    if (typeof this._.options.ontick === 'function')
+      this._.interval = setInterval(function () {
+        trigger.call(this, 'ontick', this.getDuration())
+      }.bind(this), +this._.options.tick * 1000)
+    this._.start = +new Date
+    this._.status = 'started'
+    trigger.call(this, 'onstart', this.getDuration())
+    return this
+  }
 
   Timer.prototype.pause = function () {
     if (this._.status !== 'started') return this
