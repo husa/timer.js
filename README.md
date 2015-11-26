@@ -9,9 +9,10 @@ Simple and lightweight library without any dependencies
 
 ### Installation
 
-The easiest way to install timer.js is via ```npm```
-```
-    npm install timer.js
+The easiest way to install timer.js is via `npm`:
+
+```console
+$ npm install timer.js
 ```
 or if you prefer good old files,
 you can manually download [dev](https://raw.githubusercontent.com/husa/timer.js/master/dist/timer.js) or [min](https://raw.githubusercontent.com/husa/timer.js/master/dist/timer.min.js) versions.
@@ -20,6 +21,7 @@ you can manually download [dev](https://raw.githubusercontent.com/husa/timer.js/
 ### Examples
 
 Let's cook pizza
+
 ```javascript
 var pizzaTimer = new Timer();
 var pizzaCookingTime = 15 * 60; // 15 minutes
@@ -70,32 +72,32 @@ var myTimer = new Timer({
 ```
 
 
-#### ```.start(time)```
+#### `.start(time)`
 
 starts a Timer for a specified time
 
-```JavaScript
+```javascript
 myTimer.start(10) // start a timer for 10 seconds
 ```
 
-#### ```.pause()```
+#### `.pause()`
 
 pause timer
 
 ```javascript
 myTimer.pause()
 ```
-after pause you can continue the job by ```myTimer.start()```
+after pause you can continue the job by `myTimer.start()`
 
-#### ```.stop()```
+#### `.stop()`
 
 to stop timer doing his job
 
-```JavaScript
+```javaScript
 myTimer.stop()
 ```
 
-#### ```.on(option, function)```
+#### `.on(option, function)`
 
 set some specific option,
 support options without 'on' prefix. Available options are : ```tick, ontick, start, onstart, end, onend, stop, onstop, pause, onpause```
@@ -106,7 +108,7 @@ myTimer.on('end', function() {
 })
 ```
 
-#### ```.off()```
+#### `.off()`
 
 similar to 'on()' but it will remove handler
 
@@ -114,7 +116,7 @@ similar to 'on()' but it will remove handler
 myTimer.off('pause')
 ```
 
-#### ```.options()```
+#### `.options()`
 
 define multiple specific options at once as an object
 
@@ -136,36 +138,36 @@ You can use .off('all') to restore all previously defined options to defaults
 myTimer.off('all')
 ```
 
-#### ```.getStatus()```
+#### `.getStatus()`
 
 get current status of timer. Available statuses are: ```'initialized', 'started', 'paused', 'stopped'```
 
-```JavaScript
+```javaScript
 myTimer.getStatus() // 'initialized'
 myTimer.start(20).getStatus() // 'started'
 myTimer.pause().getStatus() // 'paused'
 ```
 
-#### ```.getDuration()```
+#### `.getDuration()`
 
 get remaining time(in ms)
 
-```JavaScript
+```javaScript
 myTimer.start(20)
 // some operations that lasts for 2 seconds
 myTimer.getDuration() // 18000
 ```
 
-#### ```.measureStart(label)```
+#### `.measureStart(label)`
 
 Start a high-performance measurement with an associated label, you need to use
 the same label to stop measurement, so make sure you've saved it
 
-#### ```.measureStop(label)```
+#### `.measureStop(label)`
 
 Stop the measument with the associated label, returns the numbers of elapsed ms
 
-Example
+Example:
 
 ```javascript
 
@@ -188,10 +190,11 @@ myTimer.measureStop('label1'); // 276 i.e.
 
 ## Tests
 Running tests is pretty straightforward
+
+```console
+$ npm test
 ```
-npm test
-```
-Tests are written with Jasmine, you can find all specs in ```test/specs``` folder.
+Tests are written with Jasmine, you can find all specs in `test/specs` folder.
 
 
 ## Contributing
