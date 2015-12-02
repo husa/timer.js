@@ -63,7 +63,7 @@ list of available options:
 ```javascript
 var myTimer = new Timer({
   tick    : 1,
-  ontick  : function(sec) { console.log(sec + ' seconds left') },
+  ontick  : function(ms) { console.log(ms + ' milliseconds left') },
   onstart : function() { console.log('timer started') },
   onstop  : function() { console.log('timer stop') },
   onpause : function() { console.log('timer set on pause') },
