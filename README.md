@@ -150,11 +150,11 @@ myTimer.pause().getStatus() // 'paused'
 
 #### `.getDuration()`
 
-get remaining time(in ms)
+get remaining time (in ms)
 
 ```javaScript
 myTimer.start(20)
-// some operations that lasts for 2 seconds
+// some operation that lasts for 2 seconds
 myTimer.getDuration() // 18000
 ```
 
@@ -165,7 +165,7 @@ the same label to stop measurement, so make sure you've saved it
 
 #### `.measureStop(label)`
 
-Stop the measument with the associated label, returns the numbers of elapsed ms
+Stop the measument with the associated label, returns the number of elapsed ms
 
 Example:
 
