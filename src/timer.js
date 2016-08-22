@@ -105,12 +105,38 @@
   }
 
   Timer.prototype.measureStart = function (label) {
-    this._.measures[label || ''] = +new Date
+
+    if (!this._.measures[label || '']) this._.measures[label || ''] = []
+
+    this._.measures[label || '']._ = {
+      startTime: +new Date,
+      paused: false
+    }
+    return this
+  }
+
+  Timer.prototype.measurePause = function (label) {
+    var measureArr = this._.measures[label || '']
+    if (measureArr && !measureArr._.paused) {
+      measureArr.push(+new Date - measureArr._.startTime)
+      measureArr._.paused = true
+    }
     return this
   }
 
   Timer.prototype.measureStop = function (label) {
-    return +new Date - this._.measures[label || '']
+    this.measurePause(label)
+    var arr = this._.measures[label || ''],
+      result = 0
+    if (!arr) return result
+
+    var len = arr.length
+    for (var i = 0; i < len; ++i)
+      result += arr[i]
+
+    delete this._.measures[label || '']
+
+    return result
   }
 
   function end () {
