@@ -105,38 +105,42 @@
   }
 
   Timer.prototype.measureStart = function (label) {
+    var measure
 
-    if (!this._.measures[label || '']) this._.measures[label || ''] = []
-
-    this._.measures[label || '']._ = {
-      startTime: +new Date,
-      paused: false
+    if (!this._.measures[label || '']) {
+      measure = this._.measures[label || ''] = {
+        value: 0,
+      }
     }
+    else measure = this._.measures[label || '']
+      
+    measure.timeStamp = +new Date()
+    measure.paused = false
+
     return this
   }
 
   Timer.prototype.measurePause = function (label) {
-    var measureArr = this._.measures[label || '']
-    if (measureArr && !measureArr._.paused) {
-      measureArr.push(+new Date - measureArr._.startTime)
-      measureArr._.paused = true
+    var measure = this._.measures[label || '']
+    if (measure && !measure.paused) {
+      measure.value += +new Date() - measure.timeStamp
+      measure.paused = true
     }
-    return this
+    return measure.value
+  }
+
+  Timer.prototype.measureLap = function (label) {
+    return +new Date() - this._.measures[label || ''].timeStamp
   }
 
   Timer.prototype.measureStop = function (label) {
-    this.measurePause(label)
-    var arr = this._.measures[label || ''],
-      result = 0
-    if (!arr) return result
-
-    var len = arr.length
-    for (var i = 0; i < len; ++i)
-      result += arr[i]
-
+    value = this._.measures[label || ''].value
     delete this._.measures[label || '']
+    return value
+  }
 
-    return result
+  Timer.prototype.getTime = function (label) {
+    return this._.measures[label || ''].value
   }
 
   function end () {
