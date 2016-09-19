@@ -26,7 +26,7 @@ Let's cook pizza
 var pizzaTimer = new Timer();
 var pizzaCookingTime = 15 * 60; // 15 minutes
 
-timer.start(pizzaCookingTime).on('end', function () {
+pizzaTimer.start(pizzaCookingTime).on('end', function () {
   alert('Pizza is ready, bon appetit!');
 });
 ```
