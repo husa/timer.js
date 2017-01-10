@@ -1,6 +1,5 @@
-@import url(http://weloveiconfonts.com/api/?family=fontawesome);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
-@import url(http://fonts.googleapis.com/css?family=Raleway:100);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+@import url(https://fonts.googleapis.com/css?family=Raleway:100);
 
 body {
     font-family: "Open Sans", Arial, sans-serif;
@@ -121,17 +120,16 @@ iframe {
     outline: none;
     cursor: pointer;
     margin: 5px 10px;
-    font-family: "FontAwesome", sans-serif;
-    color: inherit;
+    fill: #ECF0F1;
     font-size: 2.5em;
-    -moz-transition: color 400ms;
-    -o-transition: color 400ms;
-    -webkit-transition: color 400ms;
-    transition: color 400ms
+    -moz-transition: fill 400ms;
+    -o-transition: fill 400ms;
+    -webkit-transition: fill 400ms;
+    transition: fill 400ms
 }
 
 .demo-wrapper .buttons .button:hover {
-    color: #46627f;
+    fill: #46627f;
 }
 
 .demo-wrapper .timer {

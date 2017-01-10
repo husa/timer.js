@@ -19,9 +19,9 @@
         <h4>Simple and lightweight JavaScript timer</h4>
         <h4>No dependencies, 0.9kb when minified and gzipped</h4>
         <div class="github-buttons">
-            <iframe src="http://ghbtns.com/github-btn.html?user=husa&repo=timer.js&type=watch&count=true"
+            <iframe src="https://ghbtns.com/github-btn.html?user=husa&repo=timer.js&type=watch&count=true"
     allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-            <iframe src="http://ghbtns.com/github-btn.html?user=husa&repo=timer.js&type=fork&count=true"
+            <iframe src="https://ghbtns.com/github-btn.html?user=husa&repo=timer.js&type=fork&count=true"
     allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="YuriyHusnay">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
@@ -33,9 +33,22 @@
             <input name="time-input" type="text" class="time-input" value="20" autofocus/>
         </div>
         <div class="buttons">
-            <button class="button play  fontawesome-play"></button>
-            <button class="button pause fontawesome-pause"></button>
-            <button class="button stop  fontawesome-stop"></button>
+
+            <svg class="button play" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                <path d="M8 5v14l11-7z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+
+            <svg class="button pause" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" class="__web-inspector-hide-shortcut__"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+
+            <svg class="button stop" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M6 6h12v12H6z"/>
+            </svg>
+
         </div>
         <div class="timer">&nbsp;</div>
     </div>
