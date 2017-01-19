@@ -1,6 +1,6 @@
 {
-  "name": "timer.js",
-  "main": "timer.js",
+  "name": "timerjs",
+  "main": "dist/timer.js",
   "version": "0.3.0",
   "homepage": "https://github.com/husa/timer.js",
   "authors": [
