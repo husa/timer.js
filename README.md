@@ -160,8 +160,12 @@ myTimer.getDuration() // 18000
 
 #### `.measureStart(label)`
 
-Start a high-performance measurement with an associated label, you need to use
+Start or continue a high-performance measurement with the associated label, you need to use
 the same label to stop measurement, so make sure you've saved it
+
+#### `.measurePause(label)`
+
+Pause the measurement with the associated label
 
 #### `.measureStop(label)`
 
@@ -171,12 +175,23 @@ Example:
 
 ```javascript
 
-myTimer.measureStart('label1');
+var label = 'label1';
+
+myTimer.measureStart(label);
 var a = [];
 for (var i = 10000000; i >= 0; i--) {
     a.push(i * Math.random());
 };
-myTimer.measureStop('label1'); // 276 i.e.
+myTimer.measurePause(label);
+
+// do something else
+
+myTimer.measureStart(label);
+for (var i = 0, sum = 0; i < a.length; i++) {
+    sum += a[i];
+};
+var time_elapsed = myTimer.measureStop(label);
+
 ```
 
 > Note!

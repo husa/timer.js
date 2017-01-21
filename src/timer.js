@@ -105,12 +105,42 @@
   }
 
   Timer.prototype.measureStart = function (label) {
-    this._.measures[label || ''] = +new Date
+    var measure
+
+    if (!this._.measures[label || '']) {
+      measure = this._.measures[label || ''] = {
+        value: 0,
+      }
+    }
+    else measure = this._.measures[label || '']
+      
+    measure.timeStamp = +new Date()
+    measure.paused = false
+
     return this
   }
 
+  Timer.prototype.measurePause = function (label) {
+    var measure = this._.measures[label || '']
+    if (measure && !measure.paused) {
+      measure.value += +new Date() - measure.timeStamp
+      measure.paused = true
+    }
+    return measure.value
+  }
+
+  Timer.prototype.measureLap = function (label) {
+    return +new Date() - this._.measures[label || ''].timeStamp
+  }
+
   Timer.prototype.measureStop = function (label) {
-    return +new Date - this._.measures[label || '']
+    value = this._.measures[label || ''].value
+    delete this._.measures[label || '']
+    return value
+  }
+
+  Timer.prototype.getTime = function (label) {
+    return this._.measures[label || ''].value
   }
 
   function end () {
