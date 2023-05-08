@@ -1,11 +1,9 @@
-/* jshint indent: 2*/
-/* global Timer, jasmine, describe, it, beforeEach, expect, afterEach */
-'use strict';
+var Timer = require("../../src/timer");
 
-describe('Timer', function() {
+describe("Timer", function () {
   var timer, start, stop, pause, end, tick;
 
-  beforeEach(function(){
+  beforeEach(function () {
     timer = new Timer();
     start = jasmine.createSpy();
     pause = jasmine.createSpy();
@@ -17,16 +15,16 @@ describe('Timer', function() {
     jasmine.clock().mockDate();
   });
 
-  afterEach(function(){
+  afterEach(function () {
     jasmine.clock().uninstall();
-  })
+  });
 
-  it('should be available as global', function() {
+  it("should be available as global", function () {
     expect(Timer).toBeDefined();
   });
 
-  describe('#constructor', function() {
-    it('should self invoke without "new" keyword', function() {
+  describe("#constructor", function () {
+    it('should self invoke without "new" keyword', function () {
       var timer = new Timer(),
         timer2 = Timer();
 
@@ -34,11 +32,11 @@ describe('Timer', function() {
       expect(timer2 instanceof Timer).toBe(true);
     });
 
-    it('should accept object as arguments', function() {
+    it("should accept object as arguments", function () {
       timer = new Timer({
-        onstart : start,
-        onpause : pause,
-        onstop : stop
+        onstart: start,
+        onpause: pause,
+        onstop: stop,
       });
 
       timer.start();
@@ -52,22 +50,20 @@ describe('Timer', function() {
     });
   });
 
-  describe('#getStatus', function() {
-
-    it('should always be string', function(){
+  describe("#getStatus", function () {
+    it("should always be string", function () {
       expect(timer.getStatus()).toEqual(jasmine.any(String));
     });
 
-    it('should be valid status', function() {
+    it("should be valid status", function () {
       var match = /^(initialized|started|paused|stopped|finished)$/;
 
       expect(timer.getStatus()).toMatch(match);
     });
   });
 
-  describe('#getDuration', function() {
-
-    it('should return 0 if timer isn\'t started or paused', function() {
+  describe("#getDuration", function () {
+    it("should return 0 if timer isn't started or paused", function () {
       //initial
       expect(timer.getDuration()).toEqual(0);
       //after start
@@ -81,7 +77,7 @@ describe('Timer', function() {
       expect(timer.getDuration()).toEqual(0);
     });
 
-    it('should return actual value', function() {
+    it("should return actual value", function () {
       timer.start(10);
       jasmine.clock().tick(100);
       expect(timer.getDuration()).toEqual(9900);
@@ -96,50 +92,49 @@ describe('Timer', function() {
     });
   });
 
-  describe('#start', function() {
-
-    it('should not change status if no arguments', function(){
+  describe("#start", function () {
+    it("should not change status if no arguments", function () {
       timer.start();
-      expect(timer.getStatus()).toEqual('initialized');
+      expect(timer.getStatus()).toEqual("initialized");
       timer.start(10);
-      expect(timer.getStatus()).toEqual('started');
+      expect(timer.getStatus()).toEqual("started");
       timer.start();
-      expect(timer.getStatus()).toEqual('started');
+      expect(timer.getStatus()).toEqual("started");
     });
 
-    it('should change status to "started" if valid arguments', function(){
-      expect(timer.getStatus()).toEqual('initialized');
+    it('should change status to "started" if valid arguments', function () {
+      expect(timer.getStatus()).toEqual("initialized");
       timer.start(10);
-      expect(timer.getStatus()).toEqual('started');
+      expect(timer.getStatus()).toEqual("started");
     });
 
-    it('should trigger "onstart" callback', function() {
-      timer.on('start', start);
+    it('should trigger "onstart" callback', function () {
+      timer.on("start", start);
       timer.start(1);
       expect(start).toHaveBeenCalled();
       expect(start).toHaveBeenCalledWith(1000);
     });
 
-    it('should resume timer after pause', function() {
-      timer.on('end', end);
+    it("should resume timer after pause", function () {
+      timer.on("end", end);
       timer.start(5);
       jasmine.clock().tick(1000);
       timer.pause();
-      expect(timer.getStatus()).toBe('paused');
+      expect(timer.getStatus()).toBe("paused");
       timer.start();
-      expect(timer.getStatus()).toBe('started');
+      expect(timer.getStatus()).toBe("started");
       jasmine.clock().tick(3900);
       expect(timer.getDuration()).toBe(100);
       jasmine.clock().tick(101);
       expect(end).toHaveBeenCalled();
     });
 
-    it('should restart timer if argument provided after pause', function () {
-      timer.on('end', end);
+    it("should restart timer if argument provided after pause", function () {
+      timer.on("end", end);
       timer.start(5);
       jasmine.clock().tick(1000);
       timer.pause();
-      expect(timer.getStatus()).toBe('paused');
+      expect(timer.getStatus()).toBe("paused");
       timer.start(10);
       expect(timer.getDuration()).toBe(10000);
       jasmine.clock().tick(4001);
@@ -150,23 +145,22 @@ describe('Timer', function() {
     });
   });
 
-  describe('#pause', function() {
-
-    it('should return if timer hasn\'t started', function() {
-      timer.on('pause', pause);
+  describe("#pause", function () {
+    it("should return if timer hasn't started", function () {
+      timer.on("pause", pause);
       timer.pause();
-      expect(timer.getStatus()).toEqual('initialized');
+      expect(timer.getStatus()).toEqual("initialized");
       expect(pause).not.toHaveBeenCalled();
     });
 
-    it('should change status to "paused"', function() {
+    it('should change status to "paused"', function () {
       timer.start(1);
       timer.pause();
-      expect(timer.getStatus()).toEqual('paused');
+      expect(timer.getStatus()).toEqual("paused");
     });
 
-    it('should trigger "onpause" callback', function() {
-      timer.on('pause', pause);
+    it('should trigger "onpause" callback', function () {
+      timer.on("pause", pause);
       timer.start(1);
       timer.pause();
       expect(pause).toHaveBeenCalled();
@@ -175,34 +169,33 @@ describe('Timer', function() {
     });
   });
 
-  describe('#stop', function() {
-
-    it('should return if timer hasn\'t started', function() {
-      timer.on('stop', stop);
+  describe("#stop", function () {
+    it("should return if timer hasn't started", function () {
+      timer.on("stop", stop);
       timer.stop();
-      expect(timer.getStatus()).toEqual('initialized');
+      expect(timer.getStatus()).toEqual("initialized");
       expect(stop).not.toHaveBeenCalled();
     });
 
-    it('should change status to "stopped" after start', function() {
-      timer.on('stop', stop);
+    it('should change status to "stopped" after start', function () {
+      timer.on("stop", stop);
       timer.start(1);
       timer.stop();
-      expect(timer.getStatus()).toEqual('stopped');
+      expect(timer.getStatus()).toEqual("stopped");
       expect(stop).toHaveBeenCalled();
     });
 
-    it('should change status to "stopped" after pause', function() {
-      timer.on('stop', stop);
+    it('should change status to "stopped" after pause', function () {
+      timer.on("stop", stop);
       timer.start(1);
       timer.pause();
       timer.stop();
-      expect(timer.getStatus()).toEqual('stopped');
+      expect(timer.getStatus()).toEqual("stopped");
       expect(stop).toHaveBeenCalled();
     });
 
-    it('should trigger "onstop" callback', function() {
-      timer.on('stop', stop);
+    it('should trigger "onstop" callback', function () {
+      timer.on("stop", stop);
       timer.start(1);
       timer.stop();
       expect(stop).toHaveBeenCalled();
@@ -211,46 +204,45 @@ describe('Timer', function() {
     });
   });
 
-  describe('#on', function() {
-
-    it('should attach start callback', function() {
-      timer.on('start', start);
+  describe("#on", function () {
+    it("should attach start callback", function () {
+      timer.on("start", start);
       timer.start(1);
       expect(start).toHaveBeenCalled();
     });
 
-    it('should attach pause callback', function() {
-      timer.on('pause', pause);
+    it("should attach pause callback", function () {
+      timer.on("pause", pause);
       timer.start(1);
       timer.pause();
       expect(pause).toHaveBeenCalled();
     });
 
-    it('should attach stop callback', function() {
-      timer.on('stop', stop);
+    it("should attach stop callback", function () {
+      timer.on("stop", stop);
       timer.start(1);
       timer.stop();
       expect(stop).toHaveBeenCalled();
     });
 
-    it('should attach end callback', function() {
-      timer.on('end', end);
+    it("should attach end callback", function () {
+      timer.on("end", end);
       timer.start(1);
       jasmine.clock().tick(1001);
       expect(end).toHaveBeenCalled();
     });
 
-    it('should attach tick callback', function() {
-      timer.on('tick', tick);
+    it("should attach tick callback", function () {
+      timer.on("tick", tick);
       timer.start(2);
       jasmine.clock().tick(1001);
       expect(tick).toHaveBeenCalled();
     });
 
-    it('should accept options with/without "on"', function() {
-      timer.on('tick', tick);
-      timer.on('onstart', start);
-      timer.on('onstop', stop);
+    it('should accept options with/without "on"', function () {
+      timer.on("tick", tick);
+      timer.on("onstart", start);
+      timer.on("onstop", stop);
       timer.start(2);
       jasmine.clock().tick(1001);
       timer.stop();
@@ -260,18 +252,17 @@ describe('Timer', function() {
     });
   });
 
-  describe('#off', function() {
-
-    beforeEach(function() {
-      timer.on('tick', tick);
-      timer.on('onstart', start);
-      timer.on('stop', stop);
+  describe("#off", function () {
+    beforeEach(function () {
+      timer.on("tick", tick);
+      timer.on("onstart", start);
+      timer.on("stop", stop);
     });
 
-    it('should remove callbacks', function(){
-      timer.off('tick');
-      timer.off('onstart');
-      timer.off('stop');
+    it("should remove callbacks", function () {
+      timer.off("tick");
+      timer.off("onstart");
+      timer.off("stop");
       timer.start(2);
       jasmine.clock().tick(1900);
       timer.stop();
@@ -280,8 +271,8 @@ describe('Timer', function() {
       expect(stop).not.toHaveBeenCalled();
     });
 
-    it('should remove all callbacks if "all" passed', function() {
-      timer.off('all');
+    it('should remove all callbacks if "all" passed', function () {
+      timer.off("all");
       timer.start(2);
       jasmine.clock().tick(1900);
       timer.stop();
@@ -291,33 +282,34 @@ describe('Timer', function() {
     });
   });
 
-  describe('#callbacks execution', function() {
-
-    beforeEach(function(){
+  describe("#callbacks execution", function () {
+    beforeEach(function () {
       timer.options({
-        onstart : start,
-        ontick : tick,
-        onpause : pause,
-        onend : end,
-        onstop : stop
+        onstart: start,
+        ontick: tick,
+        onpause: pause,
+        onend: end,
+        onstop: stop,
       });
     });
 
-    it('should trigger "tick" every second', function() {
+    it('should trigger "tick" every second', function () {
       timer.start(3);
       jasmine.clock().tick(1001);
       expect(tick).toHaveBeenCalled();
-      jasmine.clock().tick(2000);
-      expect(tick.calls.count()).toEqual(3);
+      jasmine.clock().tick(1000);
+      expect(tick.calls.count()).toEqual(2);
+      jasmine.clock().tick(1000);
+      expect(tick.calls.count()).toEqual(2);
     });
 
-    it('should trigger "end"', function() {
+    it('should trigger "end"', function () {
       timer.start(2);
       jasmine.clock().tick(2001);
       expect(end).toHaveBeenCalled();
     });
 
-    it('should not trigger "end" if stopped', function() {
+    it('should not trigger "end" if stopped', function () {
       timer.start(2);
       jasmine.clock().tick(1900);
       timer.stop();
@@ -325,14 +317,23 @@ describe('Timer', function() {
       expect(end).not.toHaveBeenCalled();
       expect(stop).toHaveBeenCalled();
     });
-
   });
 
-  describe('#chaining', function() {
-
-    it('should chain any way', function() {
-      expect(function(){
-        timer.pause().stop().start().start(20).stop().pause().start().on().off().options().stop();
+  describe("#chaining", function () {
+    it("should chain any way", function () {
+      expect(function () {
+        timer
+          .pause()
+          .stop()
+          .start()
+          .start(20)
+          .stop()
+          .pause()
+          .start()
+          .on()
+          .off()
+          .options()
+          .stop();
       }).not.toThrow();
     });
   });

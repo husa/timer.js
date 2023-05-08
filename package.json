@@ -12,7 +12,8 @@
     "email": "husnaj23@gmail.com"
   },
   "scripts": {
-    "test": "grunt test",
+    "lint": "eslint .",
+    "test": "jasmine test/**/*.js",
     "prepare": "husky install"
   },
   "keywords": [
@@ -41,6 +42,8 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
     "grunt": "^0.4.5",
     "grunt-contrib-compress": "^0.14.0",
     "grunt-contrib-copy": "^0.8.2",
@@ -49,6 +52,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "gruntify-eslint": "^1.0.0",
     "husky": "^8.0.3",
+    "jasmine": "^4.6.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
   }
