@@ -1,4 +1,4 @@
-var Timer = require("../../src/timer");
+var Timer = require("./timer");
 
 describe("Timer", function () {
   var timer, start, stop, pause, end, tick;

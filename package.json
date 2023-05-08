@@ -13,7 +13,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "jasmine test/**/*.js",
+    "test": "jasmine **/*.test.js",
     "prepare": "husky install"
   },
   "keywords": [

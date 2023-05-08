@@ -10,7 +10,7 @@ module.exports = {
   ignorePatterns: ["dist/**/*.*"],
   overrides: [
     {
-      files: ["test/specs/*.js"],
+      files: ["**/*.test.js"],
       env: {
         jasmine: true,
         node: true,
