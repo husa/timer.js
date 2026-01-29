@@ -8,15 +8,9 @@
     "url": "git://github.com/husa/timer.js.git"
   },
   "bugs": {
-    "url": "http://github.com/husa/timer.js/issues",
-    "email": "husnaj23@gmail.com"
+    "url": "http://github.com/husa/timer.js/issues"
   },
-  "scripts": {
-    "lint": "prettier --check src && eslint src",
-    "test": "node --test",
-    "prepare": "husky install",
-    "build": "mkdir -p dist && cp src/timer.js dist/timer.js"
-  },
+  "homepage": "https://github.com/husa/timer.js",
   "keywords": [
     "timer.js",
     "timer",
@@ -26,19 +20,25 @@
     "stop",
     "pause"
   ],
-  "author": {
-    "name": "Yuriy Husnay",
-    "email": "husnaj23@gmail.com"
-  },
+  "author": "husa",
   "license": "MIT",
-  "readmeFilename": "readme.md",
-  "gitHead": "6c2c0f77f41b60e7af9bb92c6f0255fbb17dced4",
+  "scripts": {
+    "lint": "prettier --check src && eslint src",
+    "test": "node --test",
+    "prepare": "husky install",
+    "build": "mkdir -p dist && cp src/timer.js dist/timer.js"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint --fix"
     ],
     "*.{css,scss,md}": "prettier --write"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
