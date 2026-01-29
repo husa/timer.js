@@ -12,7 +12,7 @@
     "email": "husnaj23@gmail.com"
   },
   "scripts": {
-    "lint": "prettier --check . && eslint .",
+    "lint": "prettier --check src && eslint src",
     "test": "node --test",
     "prepare": "husky install",
     "build": "mkdir -p dist && cp src/timer.js dist/timer.js"
