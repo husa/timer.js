@@ -5,7 +5,7 @@
   "main": "dist/timer.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/husa/timer.js.git"
+    "url": "git@github.com:husa/timer.js.git"
   },
   "bugs": {
     "url": "http://github.com/husa/timer.js/issues"
@@ -38,6 +38,18 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
+    ]
+  },
+  "release": {
+    "branches": [
+      "master",
+      "temp"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
     ]
   },
   "devDependencies": {
