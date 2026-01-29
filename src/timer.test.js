@@ -1,38 +1,47 @@
-var Timer = require("./timer");
+const assert = require("node:assert/strict");
+const { describe, it, beforeEach, afterEach, mock } = require("node:test");
+const Timer = require("./timer");
 
-describe("Timer", function () {
-  var timer, start, stop, pause, end, tick;
+describe("Timer", () => {
+  let timer;
+  let start;
+  let stop;
+  let pause;
+  let end;
+  let tick;
 
-  beforeEach(function () {
+  beforeEach(() => {
     timer = new Timer();
-    start = jasmine.createSpy();
-    pause = jasmine.createSpy();
-    stop = jasmine.createSpy();
-    tick = jasmine.createSpy();
-    end = jasmine.createSpy();
+    start = mock.fn();
+    pause = mock.fn();
+    stop = mock.fn();
+    tick = mock.fn();
+    end = mock.fn();
 
-    jasmine.clock().install();
-    jasmine.clock().mockDate();
+    mock.timers.enable({
+      apis: ["setTimeout", "setInterval", "Date"],
+    });
+    mock.timers.setTime(0);
   });
 
-  afterEach(function () {
-    jasmine.clock().uninstall();
+  afterEach(() => {
+    mock.timers.reset();
   });
 
-  it("should be available as global", function () {
-    expect(Timer).toBeDefined();
+  it("should be available as global", () => {
+    assert.ok(Timer);
   });
 
-  describe("#constructor", function () {
-    it('should self invoke without "new" keyword', function () {
-      var timer = new Timer(),
-        timer2 = Timer();
+  describe("#constructor", () => {
+    it('should self invoke without "new" keyword', () => {
+      const timer = new Timer();
+      const timer2 = Timer();
 
-      expect(timer instanceof Timer).toBe(true);
-      expect(timer2 instanceof Timer).toBe(true);
+      assert.ok(timer instanceof Timer);
+      assert.ok(timer2 instanceof Timer);
     });
 
-    it("should accept object as arguments", function () {
+    it("should accept object as arguments", () => {
       timer = new Timer({
         onstart: start,
         onpause: pause,
@@ -40,250 +49,245 @@ describe("Timer", function () {
       });
 
       timer.start();
-      expect(start).not.toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 0);
       timer.start(10);
-      expect(start).toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 1);
       timer.pause();
-      expect(pause).toHaveBeenCalled();
+      assert.equal(pause.mock.callCount(), 1);
       timer.stop();
-      expect(stop).toHaveBeenCalled();
+      assert.equal(stop.mock.callCount(), 1);
     });
   });
 
-  describe("#getStatus", function () {
-    it("should always be string", function () {
-      expect(timer.getStatus()).toEqual(jasmine.any(String));
+  describe("#getStatus", () => {
+    it("should always be string", () => {
+      assert.equal(typeof timer.getStatus(), "string");
     });
 
-    it("should be valid status", function () {
-      var match = /^(initialized|started|paused|stopped|finished)$/;
-
-      expect(timer.getStatus()).toMatch(match);
+    it("should be valid status", () => {
+      const match = /^(initialized|started|paused|stopped|finished)$/;
+      assert.match(timer.getStatus(), match);
     });
   });
 
-  describe("#getDuration", function () {
-    it("should return 0 if timer isn't started or paused", function () {
-      //initial
-      expect(timer.getDuration()).toEqual(0);
-      //after start
+  describe("#getDuration", () => {
+    it("should return 0 if timer isn't started or paused", () => {
+      assert.equal(timer.getDuration(), 0);
       timer.start(10);
-      expect(timer.getDuration()).toEqual(10000);
-      //after pause
+      assert.equal(timer.getDuration(), 10000);
       timer.pause();
-      expect(timer.getDuration()).toEqual(10000);
-      //after stop
+      assert.equal(timer.getDuration(), 10000);
       timer.stop();
-      expect(timer.getDuration()).toEqual(0);
+      assert.equal(timer.getDuration(), 0);
     });
 
-    it("should return actual value", function () {
+    it("should return actual value", () => {
       timer.start(10);
-      jasmine.clock().tick(100);
-      expect(timer.getDuration()).toEqual(9900);
-      jasmine.clock().tick(1100);
-      expect(timer.getDuration()).toEqual(8800);
+      mock.timers.tick(100);
+      assert.equal(timer.getDuration(), 9900);
+      mock.timers.tick(1100);
+      assert.equal(timer.getDuration(), 8800);
       timer.pause();
-      jasmine.clock().tick(100);
-      expect(timer.getDuration()).toEqual(8800);
+      mock.timers.tick(100);
+      assert.equal(timer.getDuration(), 8800);
       timer.start();
-      jasmine.clock().tick(100);
-      expect(timer.getDuration()).toEqual(8700);
+      mock.timers.tick(100);
+      assert.equal(timer.getDuration(), 8700);
     });
   });
 
-  describe("#start", function () {
-    it("should not change status if no arguments", function () {
+  describe("#start", () => {
+    it("should not change status if no arguments", () => {
       timer.start();
-      expect(timer.getStatus()).toEqual("initialized");
+      assert.equal(timer.getStatus(), "initialized");
       timer.start(10);
-      expect(timer.getStatus()).toEqual("started");
+      assert.equal(timer.getStatus(), "started");
       timer.start();
-      expect(timer.getStatus()).toEqual("started");
+      assert.equal(timer.getStatus(), "started");
     });
 
-    it('should change status to "started" if valid arguments', function () {
-      expect(timer.getStatus()).toEqual("initialized");
+    it('should change status to "started" if valid arguments', () => {
+      assert.equal(timer.getStatus(), "initialized");
       timer.start(10);
-      expect(timer.getStatus()).toEqual("started");
+      assert.equal(timer.getStatus(), "started");
     });
 
-    it('should trigger "onstart" callback', function () {
+    it('should trigger "onstart" callback', () => {
       timer.on("start", start);
       timer.start(1);
-      expect(start).toHaveBeenCalled();
-      expect(start).toHaveBeenCalledWith(1000);
+      assert.equal(start.mock.callCount(), 1);
+      assert.deepEqual(start.mock.calls[0].arguments, [1000]);
     });
 
-    it("should resume timer after pause", function () {
+    it("should resume timer after pause", () => {
       timer.on("end", end);
       timer.start(5);
-      jasmine.clock().tick(1000);
+      mock.timers.tick(1000);
       timer.pause();
-      expect(timer.getStatus()).toBe("paused");
+      assert.equal(timer.getStatus(), "paused");
       timer.start();
-      expect(timer.getStatus()).toBe("started");
-      jasmine.clock().tick(3900);
-      expect(timer.getDuration()).toBe(100);
-      jasmine.clock().tick(101);
-      expect(end).toHaveBeenCalled();
+      assert.equal(timer.getStatus(), "started");
+      mock.timers.tick(3900);
+      assert.equal(timer.getDuration(), 100);
+      mock.timers.tick(101);
+      assert.equal(end.mock.callCount(), 1);
     });
 
-    it("should restart timer if argument provided after pause", function () {
+    it("should restart timer if argument provided after pause", () => {
       timer.on("end", end);
       timer.start(5);
-      jasmine.clock().tick(1000);
+      mock.timers.tick(1000);
       timer.pause();
-      expect(timer.getStatus()).toBe("paused");
+      assert.equal(timer.getStatus(), "paused");
       timer.start(10);
-      expect(timer.getDuration()).toBe(10000);
-      jasmine.clock().tick(4001);
-      expect(end).not.toHaveBeenCalled();
-      expect(timer.getDuration()).toBe(5999);
-      jasmine.clock().tick(6000);
-      expect(end).toHaveBeenCalled();
+      assert.equal(timer.getDuration(), 10000);
+      mock.timers.tick(4001);
+      assert.equal(end.mock.callCount(), 0);
+      assert.equal(timer.getDuration(), 5999);
+      mock.timers.tick(6000);
+      assert.equal(end.mock.callCount(), 1);
     });
   });
 
-  describe("#pause", function () {
-    it("should return if timer hasn't started", function () {
+  describe("#pause", () => {
+    it("should return if timer hasn't started", () => {
       timer.on("pause", pause);
       timer.pause();
-      expect(timer.getStatus()).toEqual("initialized");
-      expect(pause).not.toHaveBeenCalled();
+      assert.equal(timer.getStatus(), "initialized");
+      assert.equal(pause.mock.callCount(), 0);
     });
 
-    it('should change status to "paused"', function () {
+    it('should change status to "paused"', () => {
       timer.start(1);
       timer.pause();
-      expect(timer.getStatus()).toEqual("paused");
+      assert.equal(timer.getStatus(), "paused");
     });
 
-    it('should trigger "onpause" callback', function () {
+    it('should trigger "onpause" callback', () => {
       timer.on("pause", pause);
       timer.start(1);
       timer.pause();
-      expect(pause).toHaveBeenCalled();
+      assert.equal(pause.mock.callCount(), 1);
       timer.pause();
-      expect(pause.calls.count()).toEqual(1);
+      assert.equal(pause.mock.callCount(), 1);
     });
   });
 
-  describe("#stop", function () {
-    it("should return if timer hasn't started", function () {
+  describe("#stop", () => {
+    it("should return if timer hasn't started", () => {
       timer.on("stop", stop);
       timer.stop();
-      expect(timer.getStatus()).toEqual("initialized");
-      expect(stop).not.toHaveBeenCalled();
+      assert.equal(timer.getStatus(), "initialized");
+      assert.equal(stop.mock.callCount(), 0);
     });
 
-    it('should change status to "stopped" after start', function () {
+    it('should change status to "stopped" after start', () => {
       timer.on("stop", stop);
       timer.start(1);
       timer.stop();
-      expect(timer.getStatus()).toEqual("stopped");
-      expect(stop).toHaveBeenCalled();
+      assert.equal(timer.getStatus(), "stopped");
+      assert.equal(stop.mock.callCount(), 1);
     });
 
-    it('should change status to "stopped" after pause', function () {
+    it('should change status to "stopped" after pause', () => {
       timer.on("stop", stop);
       timer.start(1);
       timer.pause();
       timer.stop();
-      expect(timer.getStatus()).toEqual("stopped");
-      expect(stop).toHaveBeenCalled();
+      assert.equal(timer.getStatus(), "stopped");
+      assert.equal(stop.mock.callCount(), 1);
     });
 
-    it('should trigger "onstop" callback', function () {
+    it('should trigger "onstop" callback', () => {
       timer.on("stop", stop);
       timer.start(1);
       timer.stop();
-      expect(stop).toHaveBeenCalled();
+      assert.equal(stop.mock.callCount(), 1);
       timer.stop();
-      expect(stop.calls.count()).toEqual(1);
+      assert.equal(stop.mock.callCount(), 1);
     });
   });
 
-  describe("#on", function () {
-    it("should attach start callback", function () {
+  describe("#on", () => {
+    it("should attach start callback", () => {
       timer.on("start", start);
       timer.start(1);
-      expect(start).toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 1);
     });
 
-    it("should attach pause callback", function () {
+    it("should attach pause callback", () => {
       timer.on("pause", pause);
       timer.start(1);
       timer.pause();
-      expect(pause).toHaveBeenCalled();
+      assert.equal(pause.mock.callCount(), 1);
     });
 
-    it("should attach stop callback", function () {
+    it("should attach stop callback", () => {
       timer.on("stop", stop);
       timer.start(1);
       timer.stop();
-      expect(stop).toHaveBeenCalled();
+      assert.equal(stop.mock.callCount(), 1);
     });
 
-    it("should attach end callback", function () {
+    it("should attach end callback", () => {
       timer.on("end", end);
       timer.start(1);
-      jasmine.clock().tick(1001);
-      expect(end).toHaveBeenCalled();
+      mock.timers.tick(1001);
+      assert.equal(end.mock.callCount(), 1);
     });
 
-    it("should attach tick callback", function () {
+    it("should attach tick callback", () => {
       timer.on("tick", tick);
       timer.start(2);
-      jasmine.clock().tick(1001);
-      expect(tick).toHaveBeenCalled();
+      mock.timers.tick(1001);
+      assert.equal(tick.mock.callCount(), 1);
     });
 
-    it('should accept options with/without "on"', function () {
+    it('should accept options with/without "on"', () => {
       timer.on("tick", tick);
       timer.on("onstart", start);
       timer.on("onstop", stop);
       timer.start(2);
-      jasmine.clock().tick(1001);
+      mock.timers.tick(1001);
       timer.stop();
-      expect(start).toHaveBeenCalled();
-      expect(tick).toHaveBeenCalled();
-      expect(stop).toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 1);
+      assert.equal(tick.mock.callCount(), 1);
+      assert.equal(stop.mock.callCount(), 1);
     });
   });
 
-  describe("#off", function () {
-    beforeEach(function () {
+  describe("#off", () => {
+    beforeEach(() => {
       timer.on("tick", tick);
       timer.on("onstart", start);
       timer.on("stop", stop);
     });
 
-    it("should remove callbacks", function () {
+    it("should remove callbacks", () => {
       timer.off("tick");
       timer.off("onstart");
       timer.off("stop");
       timer.start(2);
-      jasmine.clock().tick(1900);
+      mock.timers.tick(1900);
       timer.stop();
-      expect(start).not.toHaveBeenCalled();
-      expect(tick).not.toHaveBeenCalled();
-      expect(stop).not.toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 0);
+      assert.equal(tick.mock.callCount(), 0);
+      assert.equal(stop.mock.callCount(), 0);
     });
 
-    it('should remove all callbacks if "all" passed', function () {
+    it('should remove all callbacks if "all" passed', () => {
       timer.off("all");
       timer.start(2);
-      jasmine.clock().tick(1900);
+      mock.timers.tick(1900);
       timer.stop();
-      expect(start).not.toHaveBeenCalled();
-      expect(tick).not.toHaveBeenCalled();
-      expect(stop).not.toHaveBeenCalled();
+      assert.equal(start.mock.callCount(), 0);
+      assert.equal(tick.mock.callCount(), 0);
+      assert.equal(stop.mock.callCount(), 0);
     });
   });
 
-  describe("#callbacks execution", function () {
-    beforeEach(function () {
+  describe("#callbacks execution", () => {
+    beforeEach(() => {
       timer.options({
         onstart: start,
         ontick: tick,
@@ -293,35 +297,35 @@ describe("Timer", function () {
       });
     });
 
-    it('should trigger "tick" every second', function () {
+    it('should trigger "tick" every second', () => {
       timer.start(3);
-      jasmine.clock().tick(1001);
-      expect(tick).toHaveBeenCalled();
-      jasmine.clock().tick(1000);
-      expect(tick.calls.count()).toEqual(2);
-      jasmine.clock().tick(1000);
-      expect(tick.calls.count()).toEqual(2);
+      mock.timers.tick(1001);
+      assert.equal(tick.mock.callCount(), 1);
+      mock.timers.tick(1000);
+      assert.equal(tick.mock.callCount(), 2);
+      mock.timers.tick(1000);
+      assert.equal(tick.mock.callCount(), 2);
     });
 
-    it('should trigger "end"', function () {
+    it('should trigger "end"', () => {
       timer.start(2);
-      jasmine.clock().tick(2001);
-      expect(end).toHaveBeenCalled();
+      mock.timers.tick(2001);
+      assert.equal(end.mock.callCount(), 1);
     });
 
-    it('should not trigger "end" if stopped', function () {
+    it('should not trigger "end" if stopped', () => {
       timer.start(2);
-      jasmine.clock().tick(1900);
+      mock.timers.tick(1900);
       timer.stop();
-      jasmine.clock().tick(1000);
-      expect(end).not.toHaveBeenCalled();
-      expect(stop).toHaveBeenCalled();
+      mock.timers.tick(1000);
+      assert.equal(end.mock.callCount(), 0);
+      assert.equal(stop.mock.callCount(), 1);
     });
   });
 
-  describe("#chaining", function () {
-    it("should chain any way", function () {
-      expect(function () {
+  describe("#chaining", () => {
+    it("should chain any way", () => {
+      assert.doesNotThrow(() => {
         timer
           .pause()
           .stop()
@@ -334,7 +338,7 @@ describe("Timer", function () {
           .off()
           .options()
           .stop();
-      }).not.toThrow();
+      });
     });
   });
 });
