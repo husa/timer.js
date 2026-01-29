@@ -41,12 +41,13 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.3",
-    "@commitlint/config-conventional": "^17.6.3",
-    "eslint": "^8.40.0",
-    "eslint-config-prettier": "^8.8.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8"
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1"
   }
 }

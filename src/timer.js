@@ -2,7 +2,6 @@
   "use strict";
   // eslint-disable-next-line no-undef
   if (typeof define === "function" && define.amd) define([], factory);
-  // eslint-disable-next-line no-undef
   else if (typeof exports === "object") module.exports = factory();
   else root.Timer = factory();
 })(this, function () {
@@ -43,7 +42,7 @@
         function () {
           trigger.call(this, "ontick", this.getDuration());
         }.bind(this),
-        +this._.options.tick * 1000
+        +this._.options.tick * 1000,
       );
     this._.start = +new Date();
     this._.status = "started";
