@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "Simple and lighweight but powerfull eventdriven JavaScript timer",
   "main": "dist/timer.js",
+  "types": "dist/timer.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:husa/timer.js.git"
@@ -24,9 +25,9 @@
   "license": "MIT",
   "scripts": {
     "lint": "prettier --check src && eslint src",
-    "test": "node --test",
+    "test": "node --test src/timer.test.js",
     "prepare": "husky install",
-    "build": "mkdir -p dist && cp src/timer.js dist/timer.js"
+    "build": "mkdir -p dist && cp src/timer.js dist/timer.js && cp src/timer.d.ts dist/timer.d.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
