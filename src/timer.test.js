@@ -106,6 +106,26 @@ describe("Timer", () => {
       assert.equal(timer.getStatus(), "started");
     });
 
+    it("should ignore zero duration when no previous duration", () => {
+      timer.on("start", start);
+      timer.on("end", end);
+      timer.start(0);
+      assert.equal(timer.getStatus(), "initialized");
+      assert.equal(start.mock.callCount(), 0);
+      mock.timers.tick(1000);
+      assert.equal(end.mock.callCount(), 0);
+    });
+
+    it("should treat negative duration the same as zero", () => {
+      timer.on("start", start);
+      timer.on("end", end);
+      timer.start(-5);
+      assert.equal(timer.getStatus(), "initialized");
+      assert.equal(start.mock.callCount(), 0);
+      mock.timers.tick(1000);
+      assert.equal(end.mock.callCount(), 0);
+    });
+
     it('should change status to "started" if valid arguments', () => {
       assert.equal(timer.getStatus(), "initialized");
       timer.start(10);
@@ -129,7 +149,9 @@ describe("Timer", () => {
       assert.equal(timer.getStatus(), "started");
       mock.timers.tick(3900);
       assert.equal(timer.getDuration(), 100);
+      assert.equal(timer.getStatus(), "started");
       mock.timers.tick(101);
+      assert.equal(timer.getStatus(), "stopped");
       assert.equal(end.mock.callCount(), 1);
     });
 
@@ -146,6 +168,20 @@ describe("Timer", () => {
       assert.equal(timer.getDuration(), 5999);
       mock.timers.tick(6000);
       assert.equal(end.mock.callCount(), 1);
+    });
+
+    it('should ignore start calls if already "started"', () => {
+      timer.on("start", start);
+      timer.start(5);
+      assert.equal(timer.getDuration(), 5000);
+      assert.equal(start.mock.callCount(), 1);
+      // any new .start calls are ignored
+      timer.start(10);
+      assert.equal(start.mock.callCount(), 1);
+      assert.equal(timer.getDuration(), 5000);
+      timer.start([{ what: "ever" }]);
+      assert.equal(start.mock.callCount(), 1);
+      assert.equal(timer.getDuration(), 5000);
     });
   });
 

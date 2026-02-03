@@ -32,10 +32,12 @@
   };
 
   Timer.prototype.start = function (duration) {
-    if (!+duration && !this._.duration) return this;
-    duration && (duration *= 1000);
+    // timer already running
     if (this._.timeout && this._.status === "started") return this;
-    this._.duration = duration || this._.duration;
+    const isDurationValid = typeof duration === "number" && duration > 0;
+    // no valid duration provided and timer isn't "on pause"
+    if (!isDurationValid && !this._.duration) return this;
+    this._.duration = duration * 1000 || this._.duration;
     this._.timeout = setTimeout(end.bind(this), this._.duration);
     if (typeof this._.options.ontick === "function")
       this._.interval = setInterval(
