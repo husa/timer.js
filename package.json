@@ -26,7 +26,7 @@
   "scripts": {
     "lint": "prettier --check src && eslint src",
     "test": "node --test src/timer.test.js",
-    "prepare": "husky install",
+    "prepare": "husky",
     "build": "mkdir -p dist && cp src/timer.js dist/timer.js && cp src/timer.d.ts dist/timer.d.ts"
   },
   "lint-staged": {
