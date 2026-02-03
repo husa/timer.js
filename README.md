@@ -1,6 +1,5 @@
 # Timer.js
 
-Tiny, zero-dependency, event-driven countdown timer for Node.js and browsers.
 Simple and lightweight, zero-dependency library to create and manage, well, _timers_.
 
 - Chainable API
